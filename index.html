@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>btcd.dev — dev nhưng mà cute</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: #F5F1EB; color: #1A1A1A; line-height: 1.6; overflow-x: hidden; transition: background 0.5s ease; }
+  body.mode-hr { background: #F4F4F2; }
+  body.mode-gf { background: #FFF0F3; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  .cursor-trail { position: fixed; pointer-events: none; font-size: 16px; z-index: 9999; user-select: none; transition: opacity 0.5s; }
+  .floating-emoji { position: fixed; pointer-events: none; font-size: 24px; z-index: 1; opacity: 0.3; animation: float-up 8s linear forwards; }
+  @keyframes float-up { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.2; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+
+  nav { padding: 20px 0; position: sticky; top: 0; z-index: 100; background: rgba(245, 241, 235, 0.85); backdrop-filter: blur(12px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 600; cursor: pointer; user-select: none; }
+  .logo .dot { color: #E94560; }
+  .logo .blink { animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .nav-links { display: flex; gap: 24px; font-size: 13px; align-items: center; }
+  .nav-links a { color: #555; text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: #E94560; }
+  .play-btn { background: #1A1A1A; color: #fff; padding: 6px 14px; border-radius: 999px; font-size: 12px; cursor: pointer; border: none; font-family: inherit; display: flex; align-items: center; gap: 4px; transition: transform 0.2s; }
+  .play-btn:hover { transform: scale(1.05) rotate(-2deg); }
+  @media (max-width: 720px) { .nav-links a { display: none; } }
+
+  .hero { padding: 60px 0 40px; text-align: center; position: relative; }
+  .status { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #E5DFD5; padding: 6px 14px; border-radius: 999px; font-size: 13px; margin-bottom: 28px; cursor: pointer; user-select: none; transition: transform 0.2s; }
+  .status:hover { transform: scale(1.05); }
+  .status .dot { width: 8px; height: 8px; background: #1DB954; border-radius: 50%; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  h1.hero-title { font-size: clamp(40px, 7vw, 80px); font-weight: 500; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 16px; user-select: none; }
+  .wordplay { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #E94560; cursor: pointer; display: inline-block; transition: transform 0.3s; position: relative; }
+  .wordplay:hover { transform: rotate(-3deg) scale(1.05); }
+  .pronounce { font-family: 'JetBrains Mono', monospace; font-style: normal; font-size: 0.55em; color: #999; vertical-align: middle; background: #FAF6EF; padding: 2px 8px; border-radius: 6px; margin: 0 4px; cursor: pointer; user-select: none; }
+  .pronounce:hover { background: #FFE4EC; color: #B91C5C; }
+  .hero-sub { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px; color: #B91C5C; max-width: 580px; margin: 16px auto 0; }
+  .hero-tagline { font-size: 15px; color: #666; margin-top: 12px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .hero-emojis { margin-top: 28px; display: flex; gap: 10px; justify-content: center; font-size: 28px; }
+  .hero-emojis span { cursor: pointer; transition: transform 0.3s; display: inline-block; }
+  .hero-emojis span:hover { transform: scale(1.4) rotate(15deg); }
+  .wordplay-tooltip { position: absolute; bottom: -32px; left: 50%; transform: translateX(-50%); background: #1A1A1A; color: #fff; padding: 6px 12px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-style: normal; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .wordplay:hover .wordplay-tooltip { opacity: 1; }
+
+  @keyframes glitch { 0%, 100% { transform: translate(0); } 20% { transform: translate(-3px, 2px); } 40% { transform: translate(2px, -2px); color: #E94560; } 60% { transform: translate(-2px, 1px); color: #1DB954; } 80% { transform: translate(1px, -1px); } }
+  .glitching { animation: glitch 0.3s ease-out; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 40px 0; }
+  @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+  .split-card { padding: 36px 28px; border-radius: 24px; min-height: 200px; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
+  .split-card:hover { transform: translateY(-4px) rotate(-0.5deg); }
+  .split-card.weekend:hover { transform: translateY(-4px) rotate(0.5deg); }
+  .split-card.weekday { background: #1A1A1A; color: #fff; }
+  .split-card.weekend { background: #FFD1DC; color: #2A0F1A; }
+  .split-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; margin-bottom: 10px; }
+  .split-title { font-size: 24px; font-weight: 500; line-height: 1.2; margin-bottom: 12px; }
+  .split-card.weekend .split-title .serif { font-family: 'Instrument Serif', serif; font-style: italic; }
+  .split-desc { font-size: 14px; opacity: 0.85; }
+  .split-emoji { position: absolute; bottom: 20px; right: 24px; font-size: 56px; opacity: 0.5; transition: transform 0.4s; }
+  .split-card:hover .split-emoji { transform: scale(1.3) rotate(20deg); opacity: 0.8; }
+
+  section { padding: 60px 0; position: relative; }
+  .section-label { font-family: 'Instrument Serif', serif; font-style: italic; color: #E94560; font-size: 16px; margin-bottom: 8px; }
+  .section-title { font-size: 32px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 32px; line-height: 1.15; max-width: 600px; cursor: pointer; user-select: none; }
+  .section-title .serif { font-family: 'Instrument Serif', serif; font-style: italic; color: #E94560; }
+
+  .mode-intro { text-align: center; margin-bottom: 40px; }
+  .mode-question { font-size: 36px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; max-width: 600px; margin: 0 auto 12px; }
+  .mode-sub { font-size: 16px; color: #666; }
+  .mode-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 0 auto; }
+  @media (max-width: 640px) { .mode-cards { grid-template-columns: 1fr; } }
+  .mode-card { padding: 36px 28px; border-radius: 24px; cursor: pointer; border: 2px solid transparent; transition: all 0.25s; position: relative; overflow: hidden; background: #fff; }
+  .mode-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+  .mode-card.hr { border-color: #1A1A1A; }
+  .mode-card.hr:hover { background: #1A1A1A; color: #fff; }
+  .mode-card.gf { border-color: #E94560; background: #FFE4EC; }
+  .mode-card.gf:hover { background: #E94560; color: #fff; }
+  .mode-icon { font-size: 40px; margin-bottom: 12px; transition: transform 0.3s; }
+  .mode-card:hover .mode-icon { transform: scale(1.2) rotate(-10deg); }
+  .mode-card-title { font-size: 22px; font-weight: 500; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .mode-card-title .serif { font-family: 'Instrument Serif', serif; font-style: italic; }
+  .mode-card-desc { font-size: 13px; opacity: 0.85; margin-bottom: 18px; line-height: 1.6; }
+  .mode-meta { font-size: 11px; opacity: 0.6; letter-spacing: 0.08em; }
+
+  .quiz-active { display: none; }
+  .quiz-active.show { display: block; }
+  .quiz-header { display: flex; justify-content: space-between; align-items: center; max-width: 680px; margin: 0 auto 20px; padding: 0 8px; }
+  .back-btn { background: none; border: none; font-size: 13px; color: #666; cursor: pointer; font-family: inherit; }
+  .back-btn:hover { color: #1A1A1A; }
+  .mode-badge { font-size: 11px; padding: 4px 12px; border-radius: 999px; font-weight: 500; }
+  .mode-badge.hr { background: #1A1A1A; color: #fff; }
+  .mode-badge.gf { background: #E94560; color: #fff; }
+  .quiz-box { background: #fff; border: 1px solid #E5DFD5; border-radius: 28px; padding: 40px 36px; max-width: 680px; margin: 0 auto; min-height: 380px; }
+  @media (max-width: 640px) { .quiz-box { padding: 28px 22px; border-radius: 20px; } }
+  .progress-bar { width: 100%; height: 4px; background: #F0E9DE; border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #1A1A1A; width: 20%; border-radius: 2px; transition: width 0.4s ease; }
+  .quiz-active.gf-active .progress-fill { background: #E94560; }
+  .q-number { font-size: 12px; color: #999; margin-bottom: 12px; letter-spacing: 0.1em; }
+  .q-text { font-size: 22px; font-weight: 500; line-height: 1.3; margin-bottom: 24px; letter-spacing: -0.01em; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option { padding: 14px 18px; background: #FAF6EF; border: 1.5px solid transparent; border-radius: 14px; cursor: pointer; font-size: 14px; text-align: left; transition: all 0.2s; display: flex; align-items: center; gap: 12px; font-family: inherit; color: inherit; width: 100%; }
+  .quiz-active.gf-active .option { background: #FFE4EC; }
+  .option:hover { background: #fff; border-color: #1A1A1A; transform: translateX(6px); }
+  .quiz-active.gf-active .option:hover { border-color: #E94560; }
+  .option .emoji { font-size: 20px; flex-shrink: 0; }
+  .result-card { text-align: center; padding: 8px 0; }
+  .result-emoji { font-size: 64px; margin-bottom: 10px; animation: bounce-in 0.6s ease-out; }
+  @keyframes bounce-in { 0% { transform: scale(0); } 60% { transform: scale(1.3); } 100% { transform: scale(1); } }
+  .result-title { font-size: 26px; font-weight: 500; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .result-title .serif { font-family: 'Instrument Serif', serif; font-style: italic; color: #E94560; }
+  .result-tag { display: inline-block; padding: 5px 12px; border-radius: 999px; font-size: 12px; margin-bottom: 14px; font-weight: 500; }
+  .result-tag.hr { background: #E8E8E5; color: #1A1A1A; }
+  .result-tag.gf { background: #FFE4EC; color: #B91C5C; }
+  .result-desc { font-size: 14px; color: #555; line-height: 1.7; max-width: 460px; margin: 0 auto 18px; }
+  .result-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0; }
+  .result-meta-item { background: #FAF6EF; border-radius: 12px; padding: 12px 8px; }
+  .quiz-active.gf-active .result-meta-item { background: #FFE4EC; }
+  .result-meta-label { font-size: 10px; color: #999; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .result-meta-val { font-size: 13px; font-weight: 500; }
+  .score-meter { margin: 16px auto; max-width: 300px; }
+  .score-label { font-size: 11px; color: #999; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .score-bar { height: 8px; background: #F0E9DE; border-radius: 4px; overflow: hidden; }
+  .score-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #1A1A1A, #E94560); border-radius: 4px; transition: width 1.2s ease-out; }
+  .score-num { font-size: 28px; font-weight: 500; margin-top: 6px; }
+  .cta-result { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+  .btn { padding: 11px 22px; border-radius: 999px; border: none; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: transform 0.15s; font-family: inherit; }
+  .btn:hover { transform: translateY(-2px) scale(1.03); }
+  .btn-primary { background: #1A1A1A; color: #fff; }
+  .quiz-active.gf-active .btn-primary { background: #E94560; }
+  .btn-secondary { background: #FAF6EF; color: #1A1A1A; border: 1px solid #E5DFD5; }
+  .code-block { background: #1A1A1A; color: #A0E0A0; padding: 14px 18px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-align: left; max-width: 460px; margin: 14px auto; line-height: 1.7; }
+  .code-block .key { color: #FFD1DC; } .code-block .val { color: #A0E0FF; }
+
+  .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .portfolio-grid { grid-template-columns: 1fr; } }
+  .proj-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 18px; padding: 16px; transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
+  .proj-card:hover { transform: translateY(-6px) rotate(-1deg); border-color: #1A1A1A; box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+  .proj-thumb { aspect-ratio: 16/10; border-radius: 12px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; font-size: 36px; position: relative; overflow: hidden; transition: transform 0.4s; }
+  .proj-card:hover .proj-thumb { transform: scale(1.02); }
+  .proj-thumb.lookbook { background: linear-gradient(135deg, #FFD1DC, #FFE4EC); }
+  .proj-thumb.lunchhub { background: linear-gradient(135deg, #1A1A1A, #444); color: #FFD1DC; }
+  .proj-thumb.devdict { background: linear-gradient(135deg, #FFF4D6, #FFE4B8); }
+  .proj-status { position: absolute; top: 10px; left: 10px; font-size: 10px; padding: 3px 8px; background: rgba(255,255,255,0.9); border-radius: 999px; color: #1A1A1A; font-weight: 500; }
+  .proj-status.dev { background: rgba(255, 193, 7, 0.9); }
+  .proj-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .proj-desc { font-size: 12px; color: #666; margin-bottom: 10px; line-height: 1.5; }
+  .proj-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .proj-tag { font-size: 10px; padding: 3px 8px; background: #FAF6EF; border-radius: 999px; font-family: 'JetBrains Mono', monospace; }
+
+  .counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  @media (max-width: 640px) { .counters { grid-template-columns: 1fr 1fr; } }
+  .counter-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 16px; padding: 20px; text-align: center; transition: transform 0.2s; cursor: default; }
+  .counter-card:hover { transform: scale(1.05); border-color: #E94560; }
+  .counter-num { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 36px; color: #E94560; line-height: 1; }
+  .counter-label { font-size: 11px; color: #999; letter-spacing: 0.1em; margin-top: 6px; }
+
+  .now-card { background: linear-gradient(135deg, #1A1A1A, #2D1A2D); color: #fff; border-radius: 20px; padding: 28px; }
+  .now-status { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 999px; font-size: 12px; margin-bottom: 16px; }
+  .now-dot { width: 8px; height: 8px; background: #1DB954; border-radius: 50%; animation: pulse 2s infinite; }
+  .now-text { font-size: 22px; font-weight: 500; margin-bottom: 18px; line-height: 1.4; }
+  .now-text .serif { font-family: 'Instrument Serif', serif; font-style: italic; color: #FFD1DC; }
+  .now-progress { margin: 12px 0; }
+  .now-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+  .now-fill { height: 100%; width: 67%; background: linear-gradient(90deg, #FFD1DC, #E94560); border-radius: 3px; }
+  .now-meta { font-size: 12px; opacity: 0.7; margin-top: 8px; display: flex; justify-content: space-between; }
+
+  .gh-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 18px; padding: 22px; }
+  .gh-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+  .gh-stat { font-size: 13px; color: #666; }
+  .gh-stat strong { color: #1A1A1A; font-weight: 600; }
+  .gh-grid { display: grid; grid-template-columns: repeat(26, 1fr); gap: 3px; }
+  .gh-cell { aspect-ratio: 1; background: #F0E9DE; border-radius: 2px; transition: transform 0.2s; }
+  .gh-cell:hover { transform: scale(1.5); z-index: 5; }
+  .gh-cell.l1 { background: #FFD1DC; } .gh-cell.l2 { background: #FF9DB3; }
+  .gh-cell.l3 { background: #E94560; } .gh-cell.l4 { background: #B91C5C; }
+
+  /* GAMES */
+  .games-section { background: linear-gradient(135deg, #FFE4EC 0%, #FFF4D6 100%); border-radius: 32px; padding: 40px 32px; margin: 40px 0; }
+  .games-header { text-align: center; margin-bottom: 28px; }
+  .games-tabs { display: flex; gap: 8px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+  .game-tab { padding: 10px 18px; background: #fff; border: 1.5px solid transparent; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .game-tab:hover { transform: translateY(-2px); }
+  .game-tab.active { background: #1A1A1A; color: #fff; border-color: #1A1A1A; }
+  .game-area { background: #fff; border-radius: 24px; padding: 32px; min-height: 420px; }
+  .game-panel { display: none; }
+  .game-panel.active { display: block; }
+
+  .bug-game { text-align: center; }
+  .bug-board { position: relative; height: 280px; background: linear-gradient(180deg, #FAF6EF, #FFE4EC); border-radius: 16px; overflow: hidden; cursor: crosshair; margin-top: 16px; }
+  .bug { position: absolute; font-size: 32px; user-select: none; z-index: 2; transition: opacity 0.3s; pointer-events: auto; }
+  .bug.slashed { animation: slash 0.4s ease-out forwards; pointer-events: none; }
+  @keyframes slash {
+    0% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
+    100% { transform: scale(0.3) rotate(360deg); opacity: 0; }
+  }
+  .slash-trail {
+    position: absolute; pointer-events: none;
+    width: 12px; height: 12px;
+    background: radial-gradient(circle, rgba(233,69,96,0.8), transparent);
+    border-radius: 50%;
+    z-index: 3;
+    animation: trail-fade 0.5s ease-out forwards;
+  }
+  @keyframes trail-fade {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(2); }
+  }
+  .slash-score {
+    position: absolute; pointer-events: none;
+    font-family: 'Instrument Serif', serif;
+    font-style: italic; font-size: 22px;
+    color: #E94560; font-weight: 600;
+    z-index: 4;
+    animation: score-pop 0.8s ease-out forwards;
+  }
+  @keyframes score-pop {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+  }
+  .game-hud { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+  .game-hud span { font-weight: 600; }
+  .game-cta { margin-top: 16px; }
+
+  .type-game { text-align: center; }
+  .type-snippet { background: #1A1A1A; color: #A0E0A0; padding: 20px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 14px; text-align: left; max-width: 480px; margin: 16px auto; line-height: 1.7; min-height: 80px; }
+  .type-snippet .typed { color: #FFD1DC; }
+  .type-snippet .next { background: #E94560; color: #fff; padding: 0 2px; border-radius: 2px; }
+  .type-snippet .untyped { color: #666; }
+  .type-input { width: 100%; max-width: 480px; padding: 12px 16px; border: 1.5px solid #E5DFD5; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 14px; outline: none; transition: border 0.2s; }
+  .type-input:focus { border-color: #1A1A1A; }
+  .type-stats { display: flex; gap: 12px; justify-content: center; margin-top: 12px; font-size: 13px; }
+  .type-stats span strong { color: #E94560; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 18px; }
+
+  /* TAROT MỞ RỘNG */
+  .tarot-game { text-align: center; }
+  .tarot-intro { font-size: 14px; color: #666; margin-bottom: 18px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .tarot-stage { background: linear-gradient(135deg, #1A0F2D, #3C1F4A, #5C2F5A); border-radius: 24px; padding: 32px 24px; margin: 16px auto; min-height: 420px; max-width: 560px; position: relative; overflow: hidden; color: #fff; }
+  .tarot-stars { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .tarot-star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: twinkle 2s ease-in-out infinite; }
+  @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+  .tarot-step { position: relative; z-index: 2; display: none; }
+  .tarot-step.active { display: block; animation: fade-in 0.5s ease; }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+  .tarot-step-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: 0.6; letter-spacing: 0.2em; margin-bottom: 8px; }
+  .tarot-q { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; color: #FFE4EC; margin-bottom: 20px; line-height: 1.3; }
+  .tarot-q-sub { font-size: 13px; opacity: 0.7; margin-bottom: 20px; }
+
+  .tarot-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 440px; margin: 0 auto; }
+  @media (max-width: 540px) { .tarot-options { grid-template-columns: 1fr; } }
+  .tarot-opt {
+    padding: 16px 14px; background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 14px; cursor: pointer;
+    font-family: inherit; color: #fff;
+    transition: all 0.2s; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .tarot-opt:hover { background: rgba(255,228,236,0.2); border-color: #FFE4EC; transform: translateY(-3px); }
+  .tarot-opt-emoji { font-size: 28px; }
+  .tarot-opt-label { font-size: 13px; font-weight: 500; }
+
+  .tarot-moon { font-size: 48px; margin-bottom: 8px; animation: moon-float 3s ease-in-out infinite; }
+  @keyframes moon-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  .tarot-context {
+    display: inline-flex; gap: 8px; margin-bottom: 16px;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .tarot-context-tag {
+    font-size: 11px; padding: 4px 10px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px; color: #FFE4EC;
+  }
+
+  .tarot-deck-wrap { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+  .tarot-card-back {
+    width: 90px; height: 135px;
+    background: linear-gradient(135deg, #E94560, #B91C5C);
+    border-radius: 12px; border: 2px solid #FFD1DC;
+    cursor: pointer; position: relative; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    color: #FFD1DC; font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  .tarot-card-back::before { content: ''; position: absolute; inset: 6px; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; }
+  .tarot-card-back:hover { transform: translateY(-12px) rotate(-3deg); box-shadow: 0 12px 24px rgba(233,69,96,0.5); }
+  .tarot-card-back.picked { opacity: 0.3; pointer-events: none; transform: scale(0.85); }
+
+  .tarot-card-front {
+    background: linear-gradient(135deg, #FFE4EC, #FFD1DC);
+    color: #2A0F1A;
+    border-radius: 16px; padding: 18px 16px;
+    max-width: 300px; margin: 0 auto 14px;
+    border: 2px solid #FFD1DC;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .tarot-card-roman { font-family: 'JetBrains Mono', monospace; font-size: 11px; opacity: 0.6; letter-spacing: 0.2em; margin-bottom: 6px; }
+  .tarot-card-emoji { font-size: 48px; margin: 6px 0; }
+  .tarot-card-name { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 20px; color: #B91C5C; margin-bottom: 4px; }
+  .tarot-card-subtitle { font-size: 12px; opacity: 0.7; font-style: italic; }
+  .tarot-prophecy {
+    background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px; padding: 18px 16px;
+    max-width: 440px; margin: 14px auto;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: 16px; line-height: 1.5; color: #FFE4EC;
+  }
+  .tarot-affirm {
+    margin-top: 14px; padding: 14px 18px;
+    background: linear-gradient(135deg, rgba(233,69,96,0.3), rgba(185,28,92,0.3));
+    border-radius: 12px; max-width: 440px; margin-left: auto; margin-right: auto;
+    font-size: 14px; color: #fff; font-weight: 500;
+  }
+  .tarot-affirm-label { font-size: 10px; letter-spacing: 0.2em; opacity: 0.7; margin-bottom: 4px; }
+  .tarot-affirm-text { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; }
+
+  .tarot-luckies { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 440px; margin: 14px auto; }
+  @media (max-width: 540px) { .tarot-luckies { grid-template-columns: 1fr; } }
+  .tarot-lucky { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 10px 8px; border: 1px solid rgba(255,255,255,0.1); }
+  .tarot-lucky-label { font-size: 9px; opacity: 0.6; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .tarot-lucky-val { font-size: 12px; font-weight: 500; }
+
+  /* tools, notes, vibe, hire, nl, feed */
+  .tools-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (max-width: 640px) { .tools-grid { grid-template-columns: 1fr; } }
+  .tool-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 16px; padding: 16px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.2s; }
+  .tool-card:hover { border-color: #1A1A1A; transform: translateX(6px) rotate(-0.5deg); }
+  .tool-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; transition: transform 0.3s; }
+  .tool-card:hover .tool-icon { transform: rotate(15deg) scale(1.1); }
+  .tool-icon.pink { background: #FFE4EC; } .tool-icon.cream { background: #FFF4D6; }
+  .tool-icon.mint { background: #D6F5E8; } .tool-icon.purple { background: #E8E0FF; }
+  .tool-info { flex: 1; }
+  .tool-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .tool-desc { font-size: 12px; color: #666; }
+
+  .notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 720px) { .notes-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .notes-grid { grid-template-columns: 1fr; } }
+  .note { padding: 20px 18px; border-radius: 12px; min-height: 130px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; transition: transform 0.3s; cursor: default; line-height: 1.4; }
+  .note:hover { transform: rotate(-2deg) scale(1.05); }
+  .note:nth-child(2):hover { transform: rotate(2deg) scale(1.05); }
+  .note:nth-child(4):hover { transform: rotate(-1deg) scale(1.05); }
+  .note:nth-child(5):hover { transform: rotate(1.5deg) scale(1.05); }
+  .note.pink { background: #FFE4EC; color: #5C2438; }
+  .note.cream { background: #FFF4D6; color: #5C4106; }
+  .note.mint { background: #D6F5E8; color: #0F3D2A; }
+  .note.purple { background: #E8E0FF; color: #2D2070; }
+  .note.peach { background: #FFD9C2; color: #5C2F0F; }
+  .note.gray { background: #E8E8E5; color: #1A1A1A; }
+  .note-date { font-family: 'Inter', sans-serif; font-style: normal; font-size: 10px; opacity: 0.6; margin-top: 12px; letter-spacing: 0.05em; }
+
+  .vibe-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .vibe-grid { grid-template-columns: 1fr; } }
+  .vibe-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 18px; padding: 22px; }
+  .vibe-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .vibe-icon { font-size: 22px; }
+  .vibe-title { font-size: 14px; font-weight: 600; }
+  .vibe-list { display: flex; flex-direction: column; gap: 8px; }
+  .vibe-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; background: #FAF6EF; font-size: 13px; transition: transform 0.2s; }
+  .vibe-item:hover { transform: translateX(4px); background: #FFE4EC; }
+  .vibe-thumb { width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0; }
+  .vibe-info { flex: 1; }
+  .vibe-name { font-weight: 500; }
+  .vibe-sub { font-size: 11px; color: #999; }
+
+  .hire-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) { .hire-grid { grid-template-columns: 1fr; } }
+  .hire-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 18px; padding: 22px; cursor: pointer; transition: all 0.3s; }
+  .hire-card:hover { border-color: #1A1A1A; transform: translateY(-6px) rotate(-1deg); }
+  .hire-card.featured { background: #1A1A1A; color: #fff; border-color: #1A1A1A; }
+  .hire-card.featured:hover { transform: translateY(-6px) rotate(1deg); }
+  .hire-tag { font-size: 10px; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 6px; }
+  .hire-name { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .hire-price { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 24px; margin-bottom: 10px; }
+  .hire-card.featured .hire-price { color: #FFD1DC; }
+  .hire-desc { font-size: 12px; opacity: 0.7; line-height: 1.5; }
+
+  .nl-card { background: linear-gradient(135deg, #FFE4EC, #FFD1DC); border-radius: 24px; padding: 40px 28px; text-align: center; }
+  .nl-icon { font-size: 40px; margin-bottom: 12px; }
+  .nl-title { font-size: 26px; font-weight: 500; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .nl-title .serif { font-family: 'Instrument Serif', serif; font-style: italic; color: #B91C5C; }
+  .nl-desc { font-size: 14px; color: #5C2438; margin-bottom: 20px; max-width: 400px; margin-left: auto; margin-right: auto; }
+  .nl-form { display: flex; gap: 8px; max-width: 380px; margin: 0 auto; flex-wrap: wrap; background: #fff; padding: 6px; border-radius: 999px; }
+  .nl-input { flex: 1; min-width: 160px; padding: 10px 16px; border: none; outline: none; font-size: 14px; font-family: inherit; background: transparent; }
+  .nl-btn { padding: 10px 20px; background: #1A1A1A; color: #fff; border: none; border-radius: 999px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: transform 0.2s; }
+  .nl-btn:hover { transform: scale(1.05); }
+  .nl-meta { font-size: 11px; color: #5C2438; margin-top: 12px; opacity: 0.7; }
+
+  .feed-card { background: #fff; border: 1px solid #E5DFD5; border-radius: 18px; padding: 22px; }
+  .feed-list { display: flex; flex-direction: column; gap: 8px; }
+  .feed-item { display: flex; align-items: center; gap: 10px; font-size: 13px; padding: 10px 12px; background: #FAF6EF; border-radius: 10px; transition: transform 0.2s; }
+  .feed-item:hover { transform: translateX(4px); background: #FFE4EC; }
+  .feed-dot { width: 6px; height: 6px; background: #1DB954; border-radius: 50%; flex-shrink: 0; animation: pulse 2s infinite; }
+  .feed-text { flex: 1; }
+  .feed-time { font-size: 11px; color: #999; }
+
+  .easter-egg { position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #E94560, #B91C5C); color: #fff; padding: 14px 18px; border-radius: 16px; font-size: 13px; z-index: 1000; box-shadow: 0 8px 24px rgba(233, 69, 96, 0.4); display: none; cursor: pointer; animation: slide-in 0.4s ease-out; }
+  .easter-egg.show { display: block; }
+  @keyframes slide-in { from { transform: translateX(120%); } to { transform: translateX(0); } }
+
+  .confetti { position: fixed; width: 10px; height: 10px; z-index: 9998; pointer-events: none; animation: fall 3s ease-in forwards; }
+  @keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+  footer { padding: 60px 0 40px; text-align: center; border-top: 1px solid #E5DFD5; margin-top: 40px; }
+  .footer-quote { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 22px; color: #666; max-width: 500px; margin: 0 auto 28px; cursor: pointer; }
+  .socials { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .socials a { color: #1A1A1A; text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid transparent; transition: all 0.2s; }
+  .socials a:hover { border-bottom-color: #E94560; transform: translateY(-2px); }
+  .copy { font-size: 12px; color: #999; }
+  .konami-hint { font-size: 11px; color: #999; margin-top: 12px; font-family: 'JetBrains Mono', monospace; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="glitchEl(this)">btcd<span class="dot">.</span>dev<span class="blink">_</span></div>
+    <div class="nav-links">
+      <a href="#quiz">Quiz</a>
+      <a href="#work">Work</a>
+      <a href="#games">Games</a>
+      <a href="#hire">Hire</a>
+      <button class="play-btn" onclick="scrollToGames()">🔮 Coi bói</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class="hero" id="top">
+    <div class="status" onclick="toggleStatus(this)">
+      <span class="dot"></span>
+      <span id="status-text">Online. Đang ship code hoặc ship outfit.</span>
+    </div>
+    <h1 class="hero-title">
+      Dev <span class="pronounce">/đẹp/</span><br>
+      nhưng mà <span class="wordplay">CUTE<span class="wordplay-tooltip">/kjuːt/ — "kiu-t" — adj. dễ thương + kiêu kỳ</span></span>.
+    </h1>
+    <p class="hero-sub">"Nhiều lúc tôi thấy mình cũng sầu, sầu bíu ti full."</p>
+    <div class="hero-emojis">
+      <span onclick="popEmoji(this, '💻')">💻</span>
+      <span onclick="popEmoji(this, '💄')">💄</span>
+      <span onclick="popEmoji(this, '☕')">☕</span>
+      <span onclick="popEmoji(this, '🔮')">🔮</span>
+      <span onclick="popEmoji(this, '✨')">✨</span>
+    </div>
+  </section>
+
+  <div class="split">
+    <div class="split-card weekday">
+      <div class="split-label">Weekday — Dev</div>
+      <div class="split-title">TypeScript, Cloudflare, café không đường.</div>
+      <p class="split-desc">Building Lunchhub (SaaS) + DevDict (Q2 2026). HCMC-based.</p>
+      <div class="split-emoji">💻</div>
+    </div>
+    <div class="split-card weekend">
+      <div class="split-label">Weekend — Cute</div>
+      <div class="split-title">Outfit, lookbook, <span class="serif">và kiêu nhẹ.</span></div>
+      <p class="split-desc">Run btcd lookbook — đẹp nhưng mà có tiêu chuẩn.</p>
+      <div class="split-emoji">💄</div>
+    </div>
+  </div>
+
+  <section id="quiz">
+    <div class="mode-intro">
+      <div class="section-label">— Interactive bio</div>
+      <h2 class="mode-question" onclick="glitchEl(this)">Bạn ghé qua đây vì...?</h2>
+      <p class="mode-sub">Mình có 2 bộ câu hỏi khác nhau. Chọn cái đúng với bạn.</p>
+    </div>
+    <div id="mode-cards-wrapper">
+      <div class="mode-cards">
+        <div class="mode-card hr" onclick="startQuiz('hr')">
+          <div class="mode-icon">💼</div>
+          <div class="mode-card-title">Mình là <span class="serif">nhà tuyển dụng</span></div>
+          <p class="mode-card-desc">7 câu để xem mình có hợp team. Skill, culture fit, work style.</p>
+          <div class="mode-meta">SERIOUS · 7 QUESTIONS</div>
+        </div>
+        <div class="mode-card gf" onclick="startQuiz('gf')">
+          <div class="mode-icon">💌</div>
+          <div class="mode-card-title">Mình là <span class="serif">crush tương lai</span></div>
+          <p class="mode-card-desc">7 câu vô tri check vibe match. Cảnh báo: lầy lội cao.</p>
+          <div class="mode-meta">PLAYFUL · 7 QUESTIONS</div>
+        </div>
+      </div>
+    </div>
+    <div class="quiz-active" id="quiz-hr">
+      <div class="quiz-header"><button class="back-btn" onclick="backToMode()">← đổi mode</button><span class="mode-badge hr">HR MODE</span></div>
+      <div class="quiz-box"><div class="progress-bar"><div class="progress-fill" id="progress-hr"></div></div><div id="quiz-content-hr"></div></div>
+    </div>
+    <div class="quiz-active gf-active" id="quiz-gf">
+      <div class="quiz-header"><button class="back-btn" onclick="backToMode()">← đổi mode</button><span class="mode-badge gf">CRUSH MODE</span></div>
+      <div class="quiz-box"><div class="progress-bar"><div class="progress-fill" id="progress-gf"></div></div><div id="quiz-content-gf"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="counters">
+      <div class="counter-card"><div class="counter-num" data-target="3">0</div><div class="counter-label">YEARS DEV</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="847">0</div><div class="counter-label">COMMITS 2026</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="1247">0</div><div class="counter-label">SUBSCRIBERS</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="∞" data-fake="true">0</div><div class="counter-label">COFFEE CUPS</div></div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO - REORDERED: Lunchhub → Lookbook → DevDict -->
+  <section id="work">
+    <div class="section-label">— Selected work</div>
+    <h2 class="section-title" onclick="glitchEl(this)">Things I've <span class="serif">actually shipped.</span></h2>
+    <div class="portfolio-grid">
+      <a href="https://lunchhub-seven.vercel.app" target="_blank" class="proj-card">
+        <div class="proj-thumb lunchhub"><span class="proj-status">LIVE</span>🍱</div>
+        <div class="proj-name">Lunchhub</div>
+        <p class="proj-desc">Multi-tenant SaaS for office lunch ordering. Freemium model.</p>
+        <div class="proj-tags"><span class="proj-tag">Next.js</span><span class="proj-tag">Turso</span><span class="proj-tag">Drizzle</span></div>
+      </a>
+      <a href="https://btcd-9k1.pages.dev" target="_blank" class="proj-card">
+        <div class="proj-thumb lookbook"><span class="proj-status">LIVE</span>💄</div>
+        <div class="proj-name">btcd lookbook</div>
+        <p class="proj-desc">Personal lookbook — what I wear, what I keep. A style journal on Cloudflare.</p>
+        <div class="proj-tags"><span class="proj-tag">Next.js 16</span><span class="proj-tag">Tailwind v4</span></div>
+      </a>
+      <a href="#" class="proj-card">
+        <div class="proj-thumb devdict"><span class="proj-status dev">IN DEV</span>📚</div>
+        <div class="proj-name">DevDict</div>
+        <p class="proj-desc">Vietnamese dev terminology with LLM. Q2 2026.</p>
+        <div class="proj-tags"><span class="proj-tag">Next.js</span><span class="proj-tag">AI</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- GAMES -->
+  <section id="games">
+    <div class="games-section">
+      <div class="games-header">
+        <div class="section-label">— Take a break</div>
+        <h2 class="section-title" style="margin: 0 auto;" onclick="glitchEl(this)">Chơi vài trò <span class="serif">trong khi đợi.</span></h2>
+        <p class="mode-sub" style="margin-top: 12px;">Có cả coi bói cá nhân hoá cho bạn 🔮</p>
+      </div>
+
+      <div class="games-tabs">
+        <button class="game-tab active" data-game="tarot" onclick="selectGame('tarot')">🔮 Coi bói hôm nay</button>
+        <button class="game-tab" data-game="bug" onclick="selectGame('bug')">🐛 Catch the bug</button>
+        <button class="game-tab" data-game="type" onclick="selectGame('type')">⌨️ Type the code</button>
+      </div>
+
+      <div class="game-area">
+
+        <!-- TAROT EXPANDED -->
+        <div class="game-panel active" id="game-tarot">
+          <div class="tarot-game">
+            <p class="tarot-intro">Trả lời 2 câu nhỏ → vũ trụ sẽ chọn lời nhắn riêng cho bạn hôm nay. Phong cách: tích cực, validating, không có câu xấu.</p>
+            <div class="tarot-stage">
+              <div class="tarot-stars" id="tarot-stars"></div>
+
+              <!-- STEP 1: MOOD -->
+              <div class="tarot-step active" id="tarot-step-1">
+                <div class="tarot-moon">🌙</div>
+                <div class="tarot-step-num">— STEP 1 / 3 —</div>
+                <div class="tarot-q">Hôm nay bạn đang...?</div>
+                <div class="tarot-q-sub">Chọn cái gần nhất, không có đúng sai</div>
+                <div class="tarot-options">
+                  <button class="tarot-opt" onclick="selectMood('soft')"><span class="tarot-opt-emoji">🌸</span><span class="tarot-opt-label">Mềm yếu, cần ôm</span></button>
+                  <button class="tarot-opt" onclick="selectMood('confused')"><span class="tarot-opt-emoji">🌀</span><span class="tarot-opt-label">Mơ hồ, không rõ</span></button>
+                  <button class="tarot-opt" onclick="selectMood('hopeful')"><span class="tarot-opt-emoji">✨</span><span class="tarot-opt-label">Có hy vọng, năng lượng</span></button>
+                  <button class="tarot-opt" onclick="selectMood('tired')"><span class="tarot-opt-emoji">🌿</span><span class="tarot-opt-label">Mệt, cần nghỉ</span></button>
+                </div>
+              </div>
+
+              <!-- STEP 2: TOPIC -->
+              <div class="tarot-step" id="tarot-step-2">
+                <div class="tarot-step-num">— STEP 2 / 3 —</div>
+                <div class="tarot-q">Bạn đang cần lời nhắn về...?</div>
+                <div class="tarot-q-sub">Vũ trụ sẽ nói riêng về chủ đề này</div>
+                <div class="tarot-options">
+                  <button class="tarot-opt" onclick="selectTopic('love')"><span class="tarot-opt-emoji">💖</span><span class="tarot-opt-label">Tình yêu / mối quan hệ</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('career')"><span class="tarot-opt-emoji">🎯</span><span class="tarot-opt-label">Sự nghiệp / công việc</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('self')"><span class="tarot-opt-emoji">🪞</span><span class="tarot-opt-label">Chính mình / nội tâm</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('open')"><span class="tarot-opt-emoji">🎲</span><span class="tarot-opt-label">Mở — vũ trụ tự chọn</span></button>
+                </div>
+              </div>
+
+              <!-- STEP 3: PICK CARD -->
+              <div class="tarot-step" id="tarot-step-3">
+                <div class="tarot-step-num">— STEP 3 / 3 —</div>
+                <div class="tarot-q">Hít một hơi sâu.<br>Chọn 1 lá bài.</div>
+                <div class="tarot-context" id="tarot-context-tags"></div>
+                <div class="tarot-deck-wrap">
+                  <div class="tarot-card-back" onclick="pickTarot(this)">✦</div>
+                  <div class="tarot-card-back" onclick="pickTarot(this)">✦</div>
+                  <div class="tarot-card-back" onclick="pickTarot(this)">✦</div>
+                </div>
+              </div>
+
+              <!-- STEP 4: RESULT -->
+              <div class="tarot-step" id="tarot-step-4">
+                <div id="tarot-result-content"></div>
+              </div>
+
+            </div>
+            <div class="game-cta">
+              <button class="btn btn-secondary" onclick="resetTarot()" id="tarot-reset" style="display:none;">🔄 Bói lại</button>
+              <button class="btn btn-primary" onclick="shareTarot()" id="tarot-share" style="display:none;">📸 Lưu ảnh</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUG GAME -->
+        <div class="game-panel" id="game-bug">
+          <div class="bug-game">
+            <div class="game-hud">
+              <span>Score: <strong id="bug-score">0</strong></span>
+              <span>Time: <strong id="bug-time">30</strong>s</span>
+              <span>High: <strong id="bug-high">0</strong></span>
+            </div>
+            <div class="bug-board" id="bug-board">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #999; font-size: 14px;">
+                <div style="font-size: 32px; margin-bottom: 8px;">🐛</div>
+                Bấm START để bắt bug!<br>
+                <small>Rê chuột qua bug để chém — như chém trái cây 🗡️</small>
+              </div>
+            </div>
+            <div class="game-cta"><button class="btn btn-primary" onclick="startBugGame()">▶ START</button></div>
+          </div>
+        </div>
+
+        <!-- TYPE GAME -->
+        <div class="game-panel" id="game-type">
+          <div class="type-game">
+            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Gõ đoạn code này càng nhanh càng tốt.</p>
+            <div class="type-snippet" id="type-snippet"></div>
+            <input type="text" class="type-input" id="type-input" placeholder="Bắt đầu gõ ở đây..." autocomplete="off">
+            <div class="type-stats">
+              <span>WPM: <strong id="type-wpm">0</strong></span>
+              <span>Accuracy: <strong id="type-acc">100%</strong></span>
+              <span>Time: <strong id="type-time">0</strong>s</span>
+            </div>
+            <div class="game-cta"><button class="btn btn-primary" onclick="resetTypeGame()">🔄 Snippet mới</button></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">— Right now</div>
+    <h2 class="section-title" onclick="glitchEl(this)">What I'm <span class="serif">building.</span></h2>
+    <div class="now-card">
+      <div class="now-status"><span class="now-dot"></span><span>Active · 2h ago</span></div>
+      <div class="now-text">Mình đang build <span class="serif">DevDict</span> — Vietnamese dev terminology với LLM-powered explanations.</div>
+      <div class="now-progress"><div class="now-bar"><div class="now-fill"></div></div><div class="now-meta"><span>67% — đang code search + AI</span><span>Launch Q2 2026</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">— Proof of work</div>
+    <h2 class="section-title" onclick="glitchEl(this)">GitHub doesn't <span class="serif">lie.</span></h2>
+    <div class="gh-card">
+      <div class="gh-header">
+        <div class="gh-stat"><strong>847</strong> commits năm nay</div>
+        <div class="gh-stat">🔥 Streak: <strong>34 ngày</strong></div>
+        <div class="gh-stat"><a href="https://github.com/buithicamdan07081999" target="_blank" style="color: #E94560; text-decoration: none; font-weight: 500;">@buithicamdan07081999 →</a></div>
+      </div>
+      <div class="gh-grid" id="gh-grid"></div>
+    </div>
+  </section>
+
+  <!-- TOOLS - REVISED IDEAS -->
+  <section id="tools">
+    <div class="section-label">— Free tools (soon)</div>
+    <h2 class="section-title" onclick="glitchEl(this)">Mini tools mình <span class="serif">đang build.</span></h2>
+    <div class="tools-grid">
+      <div class="tool-card"><div class="tool-icon pink">🔮</div><div class="tool-info"><div class="tool-name">Tarot Dev — bản full</div><div class="tool-desc">Standalone version, có 22 lá, share link kết quả</div></div></div>
+      <div class="tool-card"><div class="tool-icon cream">💄</div><div class="tool-info"><div class="tool-name">btcd lookbook generator</div><div class="tool-desc">Upload outfit → AI viết caption vô tri</div></div></div>
+      <div class="tool-card"><div class="tool-icon mint">🍱</div><div class="tool-info"><div class="tool-name">Lunch decider</div><div class="tool-desc">Hỏi 3 câu → rec quán trưa quanh chỗ bạn</div></div></div>
+      <div class="tool-card"><div class="tool-icon purple">💌</div><div class="tool-info"><div class="tool-name">Thư gửi mình 1 năm sau</div><div class="tool-desc">Auto gửi đúng ngày này năm sau</div></div></div>
+    </div>
+  </section>
+
+  <!-- NOTES - VÔ TRI VERSION -->
+  <section>
+    <div class="section-label">— Notes to self</div>
+    <h2 class="section-title" onclick="glitchEl(this)">Mấy điều mình <span class="serif">tự nhắc.</span></h2>
+    <div class="notes-grid">
+      <div class="note pink">"Paris by night cũng không bằng you by my side."<div class="note-date">VÔ TRI #01</div></div>
+      <div class="note cream">"Nhìn lên không bằng ai, nhìn xuống thấy mình."<div class="note-date">VÔ TRI #02</div></div>
+      <div class="note mint">"Giải quyết được thì không gì phải lo, không giải quyết được thì lo làm gì."<div class="note-date">VÔ TRI #03</div></div>
+      <div class="note purple">"Việc gì người ta làm được, chắc gì mình làm được. Việc gì người ta làm được thì để người ta làm."<div class="note-date">VÔ TRI #04</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">— Currently</div>
+    <h2 class="section-title" onclick="glitchEl(this)">Reading & <span class="serif">listening.</span></h2>
+    <div class="vibe-grid">
+      <div class="vibe-card">
+        <div class="vibe-header"><div class="vibe-icon">📚</div><div class="vibe-title">Đang đọc</div></div>
+        <div class="vibe-list">
+          <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#1A1A1A,#444)"></div><div class="vibe-info"><div class="vibe-name">Atomic Habits</div><div class="vibe-sub">James Clear</div></div></div>
+          <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#FFD1DC,#FFE4EC)"></div><div class="vibe-info"><div class="vibe-name">Designing Data-Intensive Apps</div><div class="vibe-sub">Martin Kleppmann</div></div></div>
+          <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#FFF4D6,#FFE4B8)"></div><div class="vibe-info"><div class="vibe-name">Refactoring UI</div><div class="vibe-sub">Adam Wathan</div></div></div>
+        </div>
+      </div>
+      <div class="vibe-card">
+        <div class="vibe-header"><div class="vibe-icon">🎵</div><div class="vibe-title">Đang nghe</div></div>
+        <div class="vibe-list">
+          <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#1DB954,#0F6E56)"></div><div class="vibe-info"><div class="vibe-name">Lo-fi for coding</div><div class="vibe-sub">Spotify</div></div></div>
+          <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#E94560,#B91C5C)"></div><div class="vibe-info"><div class="vibe-name">Lover - Taylor Swift</div><div class="vibe-sub">Loop on</div></div></div>
+          <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#534AB7,#3C3489)"></div><div class="vibe-info"><div class="vibe-name">Syntax FM</div><div class="vibe-sub">Podcast</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="hire">
+    <div class="section-label">— Work with me</div>
+    <h2 class="section-title" onclick="glitchEl(this)">Hire me <span class="serif">for these.</span></h2>
+    <div class="hire-grid">
+      <div class="hire-card"><div class="hire-tag">CONTENT COLLAB</div><div class="hire-name">Brand collab IG/TikTok</div><div class="hire-price">Liên hệ</div><div class="hire-desc">1 reel review. Audience dev + lifestyle.</div></div>
+      <div class="hire-card featured"><div class="hire-tag">⭐ POPULAR</div><div class="hire-name">Code 1 landing page</div><div class="hire-price">từ 3M</div><div class="hire-desc">Design + code Next.js + deploy. Có quiz + tarot như mình.</div></div>
+      <div class="hire-card"><div class="hire-tag">1-1 SESSION</div><div class="hire-name">Coffee chat 60'</div><div class="hire-price">500k</div><div class="hire-desc">Career advice cho dev. Chat về Next.js, AI.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="nl-card">
+      <div class="nl-icon">💌</div>
+      <div class="nl-title">Email <span class="serif">vô tri có ích</span></div>
+      <div class="nl-desc">Mỗi chủ nhật mình gửi 1 email: 1 chuyện đời lầy + 1 bài học dev. 3 phút, không spam.</div>
+      <div class="nl-form">
+        <input type="email" class="nl-input" placeholder="your@email.com">
+        <button class="nl-btn" onclick="celebrateSignup()">Đăng ký</button>
+      </div>
+      <div class="nl-meta">+ 1,247 người đã đăng ký · unsubscribe bất cứ lúc nào</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">— Live feed</div>
+    <h2 class="section-title" onclick="glitchEl(this)">Đang có gì <span class="serif">xảy ra.</span></h2>
+    <div class="feed-card">
+      <div class="feed-list">
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Có người vừa coi bói được lá "The Soft Bloom" 🌸</div><div class="feed-time">2 phút trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Match 99% ở Crush Mode 💕</div><div class="feed-time">14 phút trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">28 người coi bói trong 24h qua 🔮</div><div class="feed-time">1 giờ trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Newsletter có thêm 8 subscriber</div><div class="feed-time">2 giờ trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Ai đó vừa bắt 47 con bug 🐛</div><div class="feed-time">3 giờ trước</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <p class="footer-quote" onclick="glitchEl(this)">"Dev là đẹp. Cute là kiêu. Cả hai đều không thể thiếu."</p>
+    <div class="socials">
+      <a href="https://github.com/buithicamdan07081999" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/buidan99/" target="_blank">LinkedIn</a>
+      <a href="https://btcd-9k1.pages.dev" target="_blank">Lookbook</a>
+      <a href="https://www.instagram.com/btcd__/" target="_blank">Instagram</a>
+      <a href="mailto:btcdan789@gmail.com">btcdan789@gmail.com</a>
+    </div>
+    <p class="copy">© 2026 btcd.dev · Built with caffeine, Next.js & lipstick</p>
+    <p class="konami-hint">↑↑↓↓←→←→ to unlock secret 🤫</p>
+  </footer>
+
+</div>
+
+<div class="easter-egg" id="easter-egg" onclick="this.classList.remove('show')">
+  🎉 You found the secret! <br>
+  <small style="opacity: 0.9;">Email "konami" tới btcdan789@gmail.com để nhận coffee chat 50% off</small>
+</div>
+
+<script>
+// utilities
+const trailEmojis = ['✨','💫','⭐','💖','🌸'];
+let trailIdx=0, lastTrail=0;
+document.addEventListener('mousemove', (e) => {
+  const now = Date.now();
+  if (now - lastTrail < 80) return;
+  lastTrail = now;
+  const t = document.createElement('div');
+  t.className = 'cursor-trail';
+  t.textContent = trailEmojis[trailIdx % trailEmojis.length]; trailIdx++;
+  t.style.left = e.clientX + 'px'; t.style.top = e.clientY + 'px';
+  document.body.appendChild(t);
+  setTimeout(() => t.style.opacity='0', 50);
+  setTimeout(() => t.remove(), 600);
+});
+const floatEmojis = ['💻','💄','☕','🔮','✨','🌸','💋','📚','🎵','💌'];
+setInterval(() => {
+  if (document.hidden) return;
+  const e = document.createElement('div');
+  e.className = 'floating-emoji';
+  e.textContent = floatEmojis[Math.floor(Math.random()*floatEmojis.length)];
+  e.style.left = Math.random()*100 + 'vw';
+  e.style.animationDuration = (6 + Math.random()*4) + 's';
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 10000);
+}, 3500);
+
+function glitchEl(el) { el.classList.add('glitching'); setTimeout(()=>el.classList.remove('glitching'), 300); }
+function popEmoji(el, emoji) {
+  const rect = el.getBoundingClientRect();
+  for (let i=0; i<5; i++) {
+    const p = document.createElement('div');
+    p.style.cssText = `position:fixed; left:${rect.left}px; top:${rect.top}px; font-size:24px; pointer-events:none; z-index:9999; transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);`;
+    p.textContent = emoji;
+    document.body.appendChild(p);
+    setTimeout(() => {
+      p.style.left = (rect.left + (Math.random()-0.5)*200) + 'px';
+      p.style.top = (rect.top - 150 + Math.random()*100) + 'px';
+      p.style.opacity = '0';
+      p.style.transform = `rotate(${Math.random()*360}deg) scale(0.5)`;
+    }, 10);
+    setTimeout(() => p.remove(), 1100);
+  }
+}
+const statuses = ['Online. Đang ship code hoặc ship outfit.','Đang fix bug. Hoặc đang fix outfit.','Caffeine: 200%. Productivity: ¯\\_(ツ)_/¯','Status: sầu bíu ti full.','Tôi không bị burnout, tôi chỉ rất phong cách.'];
+let statusIdx=0;
+function toggleStatus() { statusIdx=(statusIdx+1)%statuses.length; document.getElementById('status-text').textContent = statuses[statusIdx]; }
+function scrollToGames() { selectGame('tarot'); document.getElementById('games').scrollIntoView({behavior:'smooth'}); }
+
+// counters
+const counters = document.querySelectorAll('.counter-num');
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      if (el.dataset.fake) { el.textContent = '∞'; return; }
+      const target = parseInt(el.dataset.target);
+      let cur = 0, step = target/60;
+      const t = setInterval(() => {
+        cur += step;
+        if (cur >= target) { cur = target; clearInterval(t); }
+        el.textContent = Math.floor(cur).toLocaleString();
+      }, 25);
+      counterObs.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => counterObs.observe(c));
+
+// QUIZ (giữ nguyên)
+const hrQuestions=[{q:'Team của bạn dùng tech stack gì?',options:[{emoji:'⚛️',text:'React/Next.js + Node',score:10},{emoji:'🔥',text:'Vue/Nuxt',score:9},{emoji:'🌐',text:'.NET / C# backend',score:8},{emoji:'🤔',text:'Stack khác',score:6}]},{q:'Phong cách làm việc?',options:[{emoji:'🎯',text:'Async-first',score:10},{emoji:'🤝',text:'Hybrid',score:9},{emoji:'📞',text:'Call nhiều',score:5},{emoji:'🏢',text:'Onsite',score:4}]},{q:'Role này là...',options:[{emoji:'💻',text:'Frontend / Fullstack với UX focus',score:10},{emoji:'🤖',text:'AI / Prompt Engineering',score:10},{emoji:'⚙️',text:'Backend / DevOps',score:7},{emoji:'📊',text:'Data / ML',score:5}]},{q:'Cần onsite?',options:[{emoji:'🌍',text:'Fully remote',score:10},{emoji:'✈️',text:'Remote-first',score:9},{emoji:'🏙️',text:'Hybrid (HCMC)',score:8},{emoji:'🏢',text:'5 ngày/tuần',score:3}]},{q:'Văn hoá team?',options:[{emoji:'🚀',text:'Move fast, ship daily',score:10},{emoji:'🎨',text:'Craft & quality',score:10},{emoji:'📈',text:'OKR-heavy',score:7},{emoji:'👔',text:'Process-heavy',score:4}]},{q:'Ngoài code đóng góp?',options:[{emoji:'🎨',text:'Design + UX',score:10},{emoji:'📝',text:'Content',score:9},{emoji:'🎤',text:'Speaking',score:8},{emoji:'🧪',text:'Chỉ code',score:6}]},{q:'Quan trọng nhất ở candidate?',options:[{emoji:'🧠',text:'Tư duy sản phẩm',score:10},{emoji:'💎',text:'Craftsmanship',score:10},{emoji:'⚡',text:'Tốc độ ship',score:8},{emoji:'📜',text:'Bằng cấp',score:4}]}];
+const gfQuestions=[{q:'Gặp lần đầu rủ đi...?',options:[{emoji:'☕',text:'Cafe yên tĩnh',score:10},{emoji:'🍜',text:'Quán mì ngon',score:9},{emoji:'🎬',text:'Xem phim',score:6},{emoji:'🍻',text:'Bar đông',score:5}]},{q:'11h đêm "không ngủ được"?',options:[{emoji:'🌙',text:'Gọi voice call',score:10},{emoji:'💬',text:'Nhắn đến khi mình ngủ',score:9},{emoji:'🎵',text:'Gửi 1 bài nhạc',score:8},{emoji:'😴',text:'Mai trả lời',score:4}]},{q:'Mình diện outfit lố?',options:[{emoji:'😍',text:'Khen thật lòng',score:10},{emoji:'📸',text:'Chụp ảnh cho mình',score:10},{emoji:'🤨',text:'"Em mặc gì kỳ vậy?"',score:2},{emoji:'🫣',text:'Đi cách 2m',score:3}]},{q:'Mình code đến 2h sáng?',options:[{emoji:'🍵',text:'Pha trà ngồi cạnh',score:10},{emoji:'😘',text:'Hôn trán',score:10},{emoji:'📺',text:'Ngủ trước',score:7},{emoji:'😤',text:'Giận',score:4}]},{q:'Love language?',options:[{emoji:'🎁',text:'Gifts',score:10},{emoji:'🫂',text:'Touch',score:10},{emoji:'💬',text:'Words',score:9},{emoji:'🤝',text:'Acts',score:9}]},{q:'Mình kể vô tri 15 phút?',options:[{emoji:'🤣',text:'Cười sặc, hỏi thêm',score:10},{emoji:'👂',text:'Nghe chăm chú',score:9},{emoji:'😐',text:'"Ờ" đổi chủ đề',score:3},{emoji:'📱',text:'Lướt phone',score:2}]},{q:'Tương lai?',options:[{emoji:'🏡',text:'Nhà nhỏ, mèo',score:10},{emoji:'✈️',text:'Freelance tự do',score:10},{emoji:'🤷',text:'Ngày nào hay ngày đó',score:5},{emoji:'💰',text:'Tiền nhiều',score:4}]}];
+function getHrResult(s){const p=Math.round((s/70)*100);if(p>=85)return{emoji:'🎯',tag:'STRONG MATCH',title:'<span class="serif">Cú lừa hoàn hảo</span>',desc:'Match cao.',code:`{ <span class="key">"verdict"</span>: <span class="val">"strong_match"</span> }`,cta1:'Email mình',cta2:'CV',percent:p};if(p>=65)return{emoji:'🤝',tag:'GOOD FIT',title:'<span class="serif">Nói chuyện được</span>',desc:'Đáng gặp cafe.',code:`{ <span class="key">"verdict"</span>: <span class="val">"good_fit"</span> }`,cta1:'Gửi JD',cta2:'CV',percent:p};if(p>=45)return{emoji:'🤔',tag:'MAYBE',title:'<span class="serif">Cần bàn thêm</span>',desc:'Cho thêm info.',code:`{ <span class="key">"verdict"</span>: <span class="val">"need_info"</span> }`,cta1:'Liên hệ',cta2:'Lại',percent:p};return{emoji:'🙏',tag:'NOT THIS TIME',title:'<span class="serif">Không lần này</span>',desc:'Stack không match.',code:`{ <span class="key">"verdict"</span>: <span class="val">"not_fit"</span> }`,cta1:'OK',cta2:'Lại',percent:p};}
+function getGfResult(s){const p=Math.round((s/70)*100);if(p>=85)return{emoji:'💕',tag:'SOULMATE',title:'<span class="serif">Định mệnh</span>',desc:'Nhắn IG.',meta:{vibe:'Endgame',song:'Lover',match:p+'%'},cta1:'Nhắn IG',cta2:'Lại',percent:p};if(p>=65)return{emoji:'😊',tag:'CRUSHABLE',title:'<span class="serif">Crush được</span>',desc:'Cafe?',meta:{vibe:'Crushable',song:'I Like Me Better',match:p+'%'},cta1:'Rủ cafe',cta2:'Lại',percent:p};if(p>=45)return{emoji:'🤝',tag:'FRIENDZONE',title:'<span class="serif">Làm bạn hợp hơn</span>',desc:'Bạn 10/10.',meta:{vibe:'Friends',song:'Friends',match:p+'%'},cta1:'Kết bạn',cta2:'Lại',percent:p};return{emoji:'😅',tag:'OOF',title:'<span class="serif">Không hợp</span>',desc:'Khác nhau quá.',meta:{vibe:'Pass',song:'thank u, next',match:p+'%'},cta1:'OK',cta2:'Lại',percent:p};}
+let mode=null,qi=0,total=0;
+function startQuiz(m){mode=m;qi=0;total=0;document.body.className='mode-'+m;document.getElementById('mode-cards-wrapper').style.display='none';document.getElementById('quiz-'+m).classList.add('show');renderQuiz();setTimeout(()=>document.getElementById('quiz-'+m).scrollIntoView({behavior:'smooth'}),100);}
+function backToMode(){document.body.className='';document.getElementById('mode-cards-wrapper').style.display='';document.getElementById('quiz-hr').classList.remove('show');document.getElementById('quiz-gf').classList.remove('show');}
+function renderQuiz(){const qs=mode==='hr'?hrQuestions:gfQuestions;const pf=document.getElementById('progress-'+mode);const c=document.getElementById('quiz-content-'+mode);if(qi<qs.length){pf.style.width=(qi/qs.length*100)+'%';const cur=qs[qi];c.innerHTML=`<div class="q-number">CÂU ${qi+1} / ${qs.length}</div><div class="q-text">${cur.q}</div><div class="options">${cur.options.map(o=>`<button class="option" onclick="selOpt(${o.score})"><span class="emoji">${o.emoji}</span><span>${o.text}</span></button>`).join('')}</div>`;}else{pf.style.width='100%';showQuizResult();}}
+function selOpt(s){total+=s;qi++;setTimeout(renderQuiz,200);}
+function showQuizResult(){const c=document.getElementById('quiz-content-'+mode);const r=mode==='hr'?getHrResult(total):getGfResult(total);if(mode==='hr'){c.innerHTML=`<div class="result-card"><div class="result-emoji">${r.emoji}</div><div class="result-tag hr">${r.tag}</div><div class="result-title">${r.title}</div><div class="score-meter"><div class="score-label">MATCH</div><div class="score-bar"><div class="score-fill" id="sf"></div></div><div class="score-num"><span id="sn">0</span>%</div></div><p class="result-desc">${r.desc}</p><div class="code-block">${r.code}</div><div class="cta-result"><a href="mailto:btcdan789@gmail.com" class="btn btn-primary">${r.cta1}</a><a href="https://portfolio-3oa.pages.dev" target="_blank" class="btn btn-secondary">${r.cta2}</a></div></div>`;}else{c.innerHTML=`<div class="result-card"><div class="result-emoji">${r.emoji}</div><div class="result-tag gf">${r.tag}</div><div class="result-title">${r.title}</div><div class="score-meter"><div class="score-label">VIBE MATCH</div><div class="score-bar"><div class="score-fill" id="sf"></div></div><div class="score-num"><span id="sn">0</span>%</div></div><p class="result-desc">${r.desc}</p><div class="result-meta"><div class="result-meta-item"><div class="result-meta-label">VIBE</div><div class="result-meta-val">${r.meta.vibe}</div></div><div class="result-meta-item"><div class="result-meta-label">SONG</div><div class="result-meta-val">${r.meta.song}</div></div><div class="result-meta-item"><div class="result-meta-label">MATCH</div><div class="result-meta-val">${r.meta.match}</div></div></div><div class="cta-result"><a href="https://www.instagram.com/btcd__/" target="_blank" class="btn btn-primary">${r.cta1}</a><button class="btn btn-secondary" onclick="backToMode()">${r.cta2}</button></div></div>`;}if(r.percent>=65)launchConfetti();setTimeout(()=>{document.getElementById('sf').style.width=r.percent+'%';let cur=0,step=r.percent/30;const t=setInterval(()=>{cur+=step;if(cur>=r.percent){cur=r.percent;clearInterval(t);}document.getElementById('sn').textContent=Math.round(cur);},40);},100);}
+
+function launchConfetti(){const colors=['#E94560','#FFD1DC','#FFF4D6','#1A1A1A','#1DB954'];for(let i=0;i<50;i++){setTimeout(()=>{const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.top='-10px';c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.transform=`rotate(${Math.random()*360}deg)`;c.style.animationDuration=(2+Math.random()*2)+'s';c.style.borderRadius=Math.random()>0.5?'50%':'0';document.body.appendChild(c);setTimeout(()=>c.remove(),4000);},i*30);}}
+function celebrateSignup(){launchConfetti();alert('Cảm ơn! 💌');}
+
+const grid=document.getElementById('gh-grid');
+for(let i=0;i<26*7;i++){const cell=document.createElement('div');cell.className='gh-cell';const r=Math.random();if(r>0.85)cell.classList.add('l4');else if(r>0.7)cell.classList.add('l3');else if(r>0.5)cell.classList.add('l2');else if(r>0.3)cell.classList.add('l1');grid.appendChild(cell);}
+
+// GAMES
+function selectGame(g){document.querySelectorAll('.game-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.game-panel').forEach(p=>p.classList.remove('active'));document.querySelector(`[data-game="${g}"]`).classList.add('active');document.getElementById('game-'+g).classList.add('active');if(g==='type')resetTypeGame();if(g==='tarot')initTarotStars();}
+
+// BUG GAME — hover to catch (Fruit Ninja style)
+let bugScore=0,bugTime=30,bugTimer=null,bugSpawner=null,bugActive=false;
+let bugHigh=parseInt(localStorage.getItem('bugHigh')||'0');
+document.getElementById('bug-high').textContent=bugHigh;
+
+function startBugGame(){
+  bugScore=0;bugTime=30;bugActive=true;
+  document.getElementById('bug-score').textContent='0';
+  document.getElementById('bug-time').textContent='30';
+  const board=document.getElementById('bug-board');
+  board.innerHTML='';
+  clearInterval(bugTimer);clearInterval(bugSpawner);
+  bugTimer=setInterval(()=>{
+    bugTime--;
+    document.getElementById('bug-time').textContent=bugTime;
+    if(bugTime<=0)endBugGame();
+  },1000);
+  bugSpawner=setInterval(spawnBug,700);
+  spawnBug();
+}
+
+function spawnBug(){
+  if(!bugActive)return;
+  const board=document.getElementById('bug-board');
+  const bug=document.createElement('div');
+  bug.className='bug';
+  bug.textContent=['🐛','🐞','🪲','🦗'][Math.floor(Math.random()*4)];
+  bug.style.left=Math.random()*(board.clientWidth-40)+'px';
+  bug.style.top=Math.random()*(board.clientHeight-40)+'px';
+  // Hover to catch (như chém trái cây)
+  bug.addEventListener('mouseenter',function(e){
+    if(bug.classList.contains('slashed'))return;
+    catchBug(bug,e);
+  });
+  board.appendChild(bug);
+  setTimeout(()=>{if(bug.parentNode)bug.remove();},2500);
+}
+
+function catchBug(bug,e){
+  bug.classList.add('slashed');
+  bugScore+=10;
+  document.getElementById('bug-score').textContent=bugScore;
+  // floating "+10" text
+  const rect=bug.getBoundingClientRect();
+  const boardRect=document.getElementById('bug-board').getBoundingClientRect();
+  const score=document.createElement('div');
+  score.className='slash-score';
+  score.textContent='+10';
+  score.style.left=(rect.left-boardRect.left+10)+'px';
+  score.style.top=(rect.top-boardRect.top)+'px';
+  document.getElementById('bug-board').appendChild(score);
+  setTimeout(()=>score.remove(),800);
+  setTimeout(()=>{if(bug.parentNode)bug.remove();},400);
+}
+
+// Mouse trail effect on bug board
+document.getElementById('bug-board').addEventListener('mousemove',(e)=>{
+  if(!bugActive)return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const trail=document.createElement('div');
+  trail.className='slash-trail';
+  trail.style.left=(e.clientX-rect.left-6)+'px';
+  trail.style.top=(e.clientY-rect.top-6)+'px';
+  e.currentTarget.appendChild(trail);
+  setTimeout(()=>trail.remove(),500);
+});
+
+function endBugGame(){
+  bugActive=false;
+  clearInterval(bugTimer);clearInterval(bugSpawner);
+  let newHigh=false;
+  if(bugScore>bugHigh){
+    bugHigh=bugScore;
+    localStorage.setItem('bugHigh',bugHigh);
+    document.getElementById('bug-high').textContent=bugHigh;
+    newHigh=true;
+    launchConfetti();
+  }
+  document.getElementById('bug-board').innerHTML=`<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;"><div style="font-size: 36px; margin-bottom: 8px;">🎉</div><div style="font-size: 18px; font-weight: 600;">Score: ${bugScore}</div><div style="font-size: 12px; color: #999; margin-top: 4px;">${newHigh?'🏆 NEW HIGH SCORE!':'Bấm START chơi lại'}</div></div>`;
+}
+
+// TYPE
+const snippets=["const dev = () => 'cute';","let bug = null; bug.fix();","if (mood === 'good') ship();","while (alive) { code(); coffee(); }","console.log('hello, crush');","function happy() { return outfit; }"];
+let typeSnippet='',typeIdx=0,typeStart=0,typeInterval=null;
+function resetTypeGame(){typeSnippet=snippets[Math.floor(Math.random()*snippets.length)];typeIdx=0;typeStart=0;renderTypeSnippet();document.getElementById('type-input').value='';document.getElementById('type-wpm').textContent='0';document.getElementById('type-acc').textContent='100%';document.getElementById('type-time').textContent='0';clearInterval(typeInterval);}
+function renderTypeSnippet(){const el=document.getElementById('type-snippet');let html='';for(let i=0;i<typeSnippet.length;i++){if(i<typeIdx)html+=`<span class="typed">${escapeHtml(typeSnippet[i])}</span>`;else if(i===typeIdx)html+=`<span class="next">${escapeHtml(typeSnippet[i])}</span>`;else html+=`<span class="untyped">${escapeHtml(typeSnippet[i])}</span>`;}el.innerHTML=html;}
+function escapeHtml(c){if(c==='<')return'&lt;';if(c==='>')return'&gt;';if(c==='&')return'&amp;';if(c===' ')return'&nbsp;';return c;}
+document.getElementById('type-input').addEventListener('input',(e)=>{const val=e.target.value;if(typeStart===0&&val.length>0){typeStart=Date.now();typeInterval=setInterval(()=>{const elapsed=Math.floor((Date.now()-typeStart)/1000);document.getElementById('type-time').textContent=elapsed;const wpm=elapsed>0?Math.round((typeIdx/5)/(elapsed/60)):0;document.getElementById('type-wpm').textContent=wpm;},200);}let correct=0;for(let i=0;i<val.length;i++){if(val[i]===typeSnippet[i])correct++;}typeIdx=correct;renderTypeSnippet();const acc=val.length>0?Math.round((correct/val.length)*100):100;document.getElementById('type-acc').textContent=acc+'%';if(val===typeSnippet){clearInterval(typeInterval);launchConfetti();}});
+
+// ============ TAROT EXPANDED ============
+function initTarotStars() {
+  const wrap = document.getElementById('tarot-stars');
+  if (wrap.children.length > 0) return;
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('div');
+    s.className = 'tarot-star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 2) + 's';
+    wrap.appendChild(s);
+  }
+}
+
+// Tarot cards: lời tiên tri thay đổi theo mood + topic
+const tarotCards = [
+  { roman: 'I', emoji: '🌸', name: 'The Soft Bloom', subtitle: 'Lá của tự thương' },
+  { roman: 'II', emoji: '🦋', name: 'The Becoming', subtitle: 'Lá của thay đổi' },
+  { roman: 'III', emoji: '✨', name: 'The Glow', subtitle: 'Lá của ánh sáng' },
+  { roman: 'IV', emoji: '🌙', name: 'The Inner Voice', subtitle: 'Lá của trực giác' },
+  { roman: 'V', emoji: '💖', name: 'The Heart', subtitle: 'Lá của tình thương' },
+  { roman: 'VI', emoji: '🎯', name: 'The Clarity', subtitle: 'Lá của định hướng' },
+  { roman: 'VII', emoji: '🌿', name: 'The Pause', subtitle: 'Lá của nghỉ ngơi' },
+  { roman: 'VIII', emoji: '🔥', name: 'The Spark', subtitle: 'Lá của hành động' },
+  { roman: 'IX', emoji: '🌈', name: 'The After Rain', subtitle: 'Lá của hồi phục' },
+  { roman: 'X', emoji: '👑', name: 'The Sovereign', subtitle: 'Lá của tự chủ' },
+];
+
+// Prophecies map: mood × topic
+const prophecies = {
+  // SOFT
+  soft_love: { p: 'Trái tim mềm không phải yếu đuối, mà là dấu hiệu của một người biết yêu sâu. Người đáng có bạn sẽ trân trọng cả phần dễ tổn thương đó.', a: 'Mình xứng đáng được yêu cả khi mình mệt nhất.' },
+  soft_career: { p: 'Hôm nay bạn không cần phải làm thật to. Một việc nhỏ làm trọn vẹn cũng đủ tỏa sáng. Chậm không phải là thua.', a: 'Tiến bộ của mình không cần ai chấm điểm.' },
+  soft_self: { p: 'Bạn đang đối xử khắt khe với chính mình hơn là với người khác. Hãy nói chuyện với bản thân như nói với một người bạn thân đang buồn.', a: 'Mình được phép nghỉ. Mình được phép sai.' },
+  soft_open: { p: 'Cảm xúc bạn đang có là hợp lý. Không cần fix, không cần giải thích. Cho phép mình mềm hôm nay — đó cũng là một dạng mạnh mẽ.', a: 'Mình ổn ngay cả khi mình không ổn.' },
+  // CONFUSED
+  confused_love: { p: 'Không biết là ai đó có yêu mình thật không? Câu trả lời nằm ở cảm giác của bạn khi ở cạnh họ — bạn có được là chính mình không?', a: 'Mình không cần biết hết câu trả lời ngay hôm nay.' },
+  confused_career: { p: 'Bạn đang đứng giữa nhiều lựa chọn. Lá này nói: lựa chọn nào khiến bạn THỞ NHẸ HƠN khi nghĩ tới — chọn cái đó. Cơ thể biết trước trí óc.', a: 'Mỗi bước đi đều dẫn mình đến đúng chỗ.' },
+  confused_self: { p: 'Bạn không phải đang lạc — bạn đang ở trong một transition. Lạc đường là khi đứng yên. Bạn vẫn đang đi, nên bạn vẫn đang đúng hướng.', a: 'Mình tin vào hành trình ngay cả khi chưa thấy đích.' },
+  confused_open: { p: 'Khi mọi thứ mờ mịt, hãy hỏi: "3 năm tới mình muốn cảm thấy thế nào?" Câu trả lời cho câu đó sẽ chỉ đường cho hôm nay.', a: 'Sự mơ hồ là không gian để điều mới được sinh ra.' },
+  // HOPEFUL
+  hopeful_love: { p: 'Năng lượng bạn đang phát ra hôm nay sẽ thu hút đúng người. Đừng kìm lại. Cứ rạng rỡ. Người dành cho bạn sẽ nhận ra.', a: 'Mình xứng đáng có người yêu mình như mình yêu họ.' },
+  hopeful_career: { p: 'Đây là cửa sổ vàng. Ý tưởng bạn đang ấp ủ — START đi. Lá này nói: "Done is better than perfect". Hôm nay là ngày của bạn.', a: 'Mình tin vào ý tưởng của mình hơn là sợ hãi của mình.' },
+  hopeful_self: { p: 'Bạn đang trên đà glow up. Người khác chưa thấy nhưng vũ trụ thấy. 3 tháng tới sẽ có khoảnh khắc bạn nhìn lại và biết ơn quyết định hôm nay.', a: 'Mình đang trở thành phiên bản mình tự hào.' },
+  hopeful_open: { p: 'Năng lượng bạn có hôm nay là quà. Dùng nó để bắt đầu cái bạn đã hoãn lâu rồi. Một câu nhắn, một dòng code, một bước chân.', a: 'Hôm nay là một ngày tốt để dám.' },
+  // TIRED
+  tired_love: { p: 'Bạn không cần phải "always available" để được yêu. Người yêu bạn thật sẽ hiểu khi bạn cần không gian. Hãy cho phép mình rút lui.', a: 'Mình được phép nghỉ trong tình yêu.' },
+  tired_career: { p: 'Burnout không phải lỗi của bạn — nó là thông điệp. Cơ thể đang xin nghỉ. Lá này yêu cầu bạn: tắt máy đi, mai làm tiếp. Productivity sẽ về.', a: 'Nghỉ ngơi là một dạng tiến bộ.' },
+  tired_self: { p: 'Bạn không bị "kém đi", bạn chỉ đang cần sạc. Cái cây cần mùa đông để mùa xuân nở. Hãy nghỉ mà không tội lỗi. Bạn đáng có điều đó.', a: 'Mình đủ ngay cả khi mình không làm gì.' },
+  tired_open: { p: 'Cơ thể đang nói chuyện với bạn. Lắng nghe nó. Ngủ thêm 1 tiếng, uống thêm 1 ly nước, đi bộ 10 phút. Đó là tất cả việc bạn cần làm hôm nay.', a: 'Mình ưu tiên bản thân không cần xin lỗi.' },
+};
+
+const moodLabels = { soft: '🌸 Mềm yếu', confused: '🌀 Mơ hồ', hopeful: '✨ Hy vọng', tired: '🌿 Mệt mỏi' };
+const topicLabels = { love: '💖 Tình yêu', career: '🎯 Sự nghiệp', self: '🪞 Chính mình', open: '🎲 Mở' };
+
+let userMood = null, userTopic = null, currentCard = null;
+function selectMood(m) {
+  userMood = m;
+  document.getElementById('tarot-step-1').classList.remove('active');
+  document.getElementById('tarot-step-2').classList.add('active');
+}
+function selectTopic(t) {
+  userTopic = t;
+  document.getElementById('tarot-step-2').classList.remove('active');
+  document.getElementById('tarot-step-3').classList.add('active');
+  // show context tags
+  document.getElementById('tarot-context-tags').innerHTML = `<span class="tarot-context-tag">${moodLabels[userMood]}</span><span class="tarot-context-tag">${topicLabels[userTopic]}</span>`;
+}
+function pickTarot(el) {
+  document.querySelectorAll('.tarot-card-back').forEach(c => c.classList.add('picked'));
+  el.classList.remove('picked');
+  el.style.transform = 'translateY(-30px) scale(1.1) rotateY(180deg)';
+
+  setTimeout(() => {
+    currentCard = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+    const key = userMood + '_' + userTopic;
+    const prop = prophecies[key];
+
+    document.getElementById('tarot-step-3').classList.remove('active');
+    document.getElementById('tarot-step-4').classList.add('active');
+
+    document.getElementById('tarot-result-content').innerHTML = `
+      <div class="tarot-card-front">
+        <div class="tarot-card-roman">${currentCard.roman}</div>
+        <div class="tarot-card-emoji">${currentCard.emoji}</div>
+        <div class="tarot-card-name">${currentCard.name}</div>
+        <div class="tarot-card-subtitle">${currentCard.subtitle}</div>
+      </div>
+      <div class="tarot-context">
+        <span class="tarot-context-tag">${moodLabels[userMood]}</span>
+        <span class="tarot-context-tag">${topicLabels[userTopic]}</span>
+      </div>
+      <div class="tarot-prophecy">"${prop.p}"</div>
+      <div class="tarot-affirm">
+        <div class="tarot-affirm-label">— AFFIRMATION HÔM NAY —</div>
+        <div class="tarot-affirm-text">"${prop.a}"</div>
+      </div>
+      <div class="tarot-luckies">
+        <div class="tarot-lucky"><div class="tarot-lucky-label">LUCKY VIBE</div><div class="tarot-lucky-val">${getLuckyVibe(userMood)}</div></div>
+        <div class="tarot-lucky"><div class="tarot-lucky-label">LUCKY ACT</div><div class="tarot-lucky-val">${getLuckyAct(userTopic)}</div></div>
+        <div class="tarot-lucky"><div class="tarot-lucky-label">LUCKY TIME</div><div class="tarot-lucky-val">${getLuckyTime()}</div></div>
+      </div>
+    `;
+    document.getElementById('tarot-reset').style.display = '';
+    document.getElementById('tarot-share').style.display = '';
+    launchConfetti();
+  }, 700);
+}
+
+function getLuckyVibe(mood) {
+  const map = { soft: 'Pastel + nhạc nhẹ', confused: 'Trắng + im lặng', hopeful: 'Đỏ + Taylor Swift', tired: 'Be + lo-fi' };
+  return map[mood] || 'Tùy hôm nay';
+}
+function getLuckyAct(topic) {
+  const map = { love: 'Gửi 1 tin nhắn', career: 'Ship 1 thứ nhỏ', self: 'Viết nhật ký 5 phút', open: 'Đi bộ 15 phút' };
+  return map[topic] || 'Sống vui';
+}
+function getLuckyTime() {
+  const times = ['07:00', '11:11', '15:15', '18:00', '20:20', '23:11'];
+  return times[Math.floor(Math.random() * times.length)];
+}
+
+function resetTarot() {
+  userMood = null; userTopic = null; currentCard = null;
+  document.querySelectorAll('.tarot-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('tarot-step-1').classList.add('active');
+  document.querySelectorAll('.tarot-card-back').forEach(c => { c.classList.remove('picked'); c.style.transform = ''; });
+  document.getElementById('tarot-reset').style.display = 'none';
+  document.getElementById('tarot-share').style.display = 'none';
+}
+
+function shareTarot() {
+  alert('📸 Trong production sẽ tự download ảnh kết quả để share lên IG/TikTok story!');
+}
+
+initTarotStars();
+resetTypeGame();
+
+// KONAMI
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
+let konamiIdx = 0;
+document.addEventListener('keydown', (e) => {
+  if (e.key === konami[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === konami.length) {
+      document.getElementById('easter-egg').classList.add('show');
+      launchConfetti();
+      konamiIdx = 0;
+      setTimeout(() => document.getElementById('easter-egg').classList.remove('show'), 8000);
+    }
+  } else { konamiIdx = 0; }
+});
+</script>
+
+</body>
+</html>
