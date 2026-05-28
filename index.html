@@ -28,6 +28,10 @@
   .nav-links a:hover { color: #E94560; }
   .play-btn { background: #1A1A1A; color: #fff; padding: 6px 14px; border-radius: 999px; font-size: 12px; cursor: pointer; border: none; font-family: inherit; display: flex; align-items: center; gap: 4px; transition: transform 0.2s; }
   .play-btn:hover { transform: scale(1.05) rotate(-2deg); }
+  .lang-switch { display: inline-flex; gap: 2px; background: rgba(0,0,0,0.05); border-radius: 999px; padding: 3px; }
+  .lang-btn { background: transparent; border: none; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #777; padding: 4px 9px; border-radius: 999px; transition: all 0.2s; letter-spacing: 0.5px; }
+  .lang-btn:hover { color: #1A1A1A; }
+  .lang-btn.active { background: #1A1A1A; color: #fff; }
   @media (max-width: 720px) { .nav-links a { display: none; } }
 
   .hero { padding: 60px 0 40px; text-align: center; position: relative; }
@@ -430,11 +434,16 @@
   <div class="nav-inner">
     <div class="logo" onclick="glitchEl(this)">btcd<span class="dot">.</span>dev<span class="blink">_</span></div>
     <div class="nav-links">
-      <a href="#quiz">Quiz</a>
-      <a href="#work">Work</a>
-      <a href="#games">Games</a>
-      <a href="#hire">Hire</a>
-      <button class="play-btn" onclick="scrollToGames()">🔮 Coi bói</button>
+      <a href="#quiz" data-i18n="nav.quiz">Quiz</a>
+      <a href="#work" data-i18n="nav.work">Work</a>
+      <a href="#games" data-i18n="nav.games">Games</a>
+      <a href="#hire" data-i18n="nav.hire">Hire</a>
+      <button class="play-btn" onclick="scrollToGames()" data-i18n="nav.play">🔮 Coi bói</button>
+      <div class="lang-switch">
+        <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
+      </div>
     </div>
   </div>
 </nav>
@@ -446,11 +455,11 @@
       <span class="dot"></span>
       <span id="status-text">Online. Đang ship code hoặc ship outfit.</span>
     </div>
-    <h1 class="hero-title">
+    <h1 class="hero-title" data-i18n="hero.title">
       Dev <span class="pronounce">/đẹp/</span><br>
       nhưng mà <span class="wordplay">CUTE<span class="wordplay-tooltip">/kjuːt/ — "kiu-t" — adj. dễ thương + kiêu kỳ</span></span>.
     </h1>
-    <p class="hero-sub">"Nhiều lúc tôi thấy mình cũng sầu, sầu bíu ti full."</p>
+    <p class="hero-sub" data-i18n="hero.sub">"Nhiều lúc tôi thấy mình cũng sầu, sầu bíu ti full."</p>
     <div class="hero-emojis">
       <span onclick="popEmoji(this, '💻')">💻</span>
       <span onclick="popEmoji(this, '💄')">💄</span>
@@ -462,81 +471,81 @@
 
   <div class="split">
     <div class="split-card weekday">
-      <div class="split-label">Weekday — Dev</div>
-      <div class="split-title">TypeScript, Cloudflare, café không đường.</div>
-      <p class="split-desc">Building Lunchhub (SaaS) + DevDict (Q2 2026). HCMC-based.</p>
+      <div class="split-label" data-i18n="split.weekdayLabel">Weekday — Dev</div>
+      <div class="split-title" data-i18n="split.weekdayTitle">TypeScript, Cloudflare, café không đường.</div>
+      <p class="split-desc" data-i18n="split.weekdayDesc">Building Lunchhub (SaaS) + DevDict (Q2 2026). HCMC-based.</p>
       <div class="split-emoji">💻</div>
     </div>
     <div class="split-card weekend">
-      <div class="split-label">Weekend — Cute</div>
-      <div class="split-title">Outfit, lookbook, <span class="serif">và kiêu nhẹ.</span></div>
-      <p class="split-desc">Run btcd lookbook — đẹp nhưng mà có tiêu chuẩn.</p>
+      <div class="split-label" data-i18n="split.weekendLabel">Weekend — Cute</div>
+      <div class="split-title" data-i18n="split.weekendTitle">Outfit, lookbook, <span class="serif">và kiêu nhẹ.</span></div>
+      <p class="split-desc" data-i18n="split.weekendDesc">Run btcd lookbook — đẹp nhưng mà có tiêu chuẩn.</p>
       <div class="split-emoji">💄</div>
     </div>
   </div>
 
   <section id="quiz">
     <div class="mode-intro">
-      <div class="section-label">— Interactive bio</div>
-      <h2 class="mode-question" onclick="glitchEl(this)">Bạn ghé qua đây vì...?</h2>
-      <p class="mode-sub">Mình có 2 bộ câu hỏi khác nhau. Chọn cái đúng với bạn.</p>
+      <div class="section-label" data-i18n="quiz.label">— Interactive bio</div>
+      <h2 class="mode-question" onclick="glitchEl(this)" data-i18n="quiz.question">Bạn ghé qua đây vì...?</h2>
+      <p class="mode-sub" data-i18n="quiz.sub">Mình có 2 bộ câu hỏi khác nhau. Chọn cái đúng với bạn.</p>
     </div>
     <div id="mode-cards-wrapper">
       <div class="mode-cards">
         <div class="mode-card hr" onclick="startQuiz('hr')">
           <div class="mode-icon">💼</div>
-          <div class="mode-card-title">Mình là <span class="serif">nhà tuyển dụng</span></div>
-          <p class="mode-card-desc">7 câu để xem mình có hợp team. Skill, culture fit, work style.</p>
-          <div class="mode-meta">SERIOUS · 7 QUESTIONS</div>
+          <div class="mode-card-title" data-i18n="quiz.hrTitle">Mình là <span class="serif">nhà tuyển dụng</span></div>
+          <p class="mode-card-desc" data-i18n="quiz.hrDesc">7 câu để xem mình có hợp team. Skill, culture fit, work style.</p>
+          <div class="mode-meta" data-i18n="quiz.hrMeta">SERIOUS · 7 QUESTIONS</div>
         </div>
         <div class="mode-card gf" onclick="startQuiz('gf')">
           <div class="mode-icon">💌</div>
-          <div class="mode-card-title">Mình là <span class="serif">crush tương lai</span></div>
-          <p class="mode-card-desc">7 câu vô tri check vibe match. Cảnh báo: lầy lội cao.</p>
-          <div class="mode-meta">PLAYFUL · 7 QUESTIONS</div>
+          <div class="mode-card-title" data-i18n="quiz.gfTitle">Mình là <span class="serif">crush tương lai</span></div>
+          <p class="mode-card-desc" data-i18n="quiz.gfDesc">7 câu vô tri check vibe match. Cảnh báo: lầy lội cao.</p>
+          <div class="mode-meta" data-i18n="quiz.gfMeta">PLAYFUL · 7 QUESTIONS</div>
         </div>
       </div>
     </div>
     <div class="quiz-active" id="quiz-hr">
-      <div class="quiz-header"><button class="back-btn" onclick="backToMode()">← đổi mode</button><span class="mode-badge hr">HR MODE</span></div>
+      <div class="quiz-header"><button class="back-btn" onclick="backToMode()" data-i18n="quiz.back">← đổi mode</button><span class="mode-badge hr" data-i18n="quiz.hrBadge">HR MODE</span></div>
       <div class="quiz-box"><div class="progress-bar"><div class="progress-fill" id="progress-hr"></div></div><div id="quiz-content-hr"></div></div>
     </div>
     <div class="quiz-active gf-active" id="quiz-gf">
-      <div class="quiz-header"><button class="back-btn" onclick="backToMode()">← đổi mode</button><span class="mode-badge gf">CRUSH MODE</span></div>
+      <div class="quiz-header"><button class="back-btn" onclick="backToMode()" data-i18n="quiz.back">← đổi mode</button><span class="mode-badge gf" data-i18n="quiz.gfBadge">CRUSH MODE</span></div>
       <div class="quiz-box"><div class="progress-bar"><div class="progress-fill" id="progress-gf"></div></div><div id="quiz-content-gf"></div></div>
     </div>
   </section>
 
   <section>
     <div class="counters">
-      <div class="counter-card"><div class="counter-num" data-target="3">0</div><div class="counter-label">YEARS DEV</div></div>
-      <div class="counter-card"><div class="counter-num" data-target="847">0</div><div class="counter-label">COMMITS 2026</div></div>
-      <div class="counter-card"><div class="counter-num" data-target="1247">0</div><div class="counter-label">SUBSCRIBERS</div></div>
-      <div class="counter-card"><div class="counter-num" data-target="∞" data-fake="true">0</div><div class="counter-label">COFFEE CUPS</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="3">0</div><div class="counter-label" data-i18n="counter.years">YEARS DEV</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="847">0</div><div class="counter-label" data-i18n="counter.commits">COMMITS 2026</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="1247">0</div><div class="counter-label" data-i18n="counter.subs">SUBSCRIBERS</div></div>
+      <div class="counter-card"><div class="counter-num" data-target="∞" data-fake="true">0</div><div class="counter-label" data-i18n="counter.coffee">COFFEE CUPS</div></div>
     </div>
   </section>
 
   <!-- PORTFOLIO - REORDERED: Lunchhub → Lookbook → DevDict -->
   <section id="work">
-    <div class="section-label">— Selected work</div>
-    <h2 class="section-title" onclick="glitchEl(this)">Things I've <span class="serif">actually shipped.</span></h2>
+    <div class="section-label" data-i18n="work.label">— Selected work</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="work.title">Things I've <span class="serif">actually shipped.</span></h2>
     <div class="portfolio-grid">
       <a href="https://lunchhub-seven.vercel.app" target="_blank" class="proj-card">
-        <div class="proj-thumb lunchhub"><span class="proj-status">LIVE</span>🍱</div>
+        <div class="proj-thumb lunchhub"><span class="proj-status" data-i18n="work.statusLive">LIVE</span>🍱</div>
         <div class="proj-name">Lunchhub</div>
-        <p class="proj-desc">Multi-tenant SaaS for office lunch ordering. Freemium model.</p>
+        <p class="proj-desc" data-i18n="work.lunchhubDesc">Multi-tenant SaaS for office lunch ordering. Freemium model.</p>
         <div class="proj-tags"><span class="proj-tag">Next.js</span><span class="proj-tag">Turso</span><span class="proj-tag">Drizzle</span></div>
       </a>
       <a href="https://btcd-9k1.pages.dev" target="_blank" class="proj-card">
-        <div class="proj-thumb lookbook"><span class="proj-status">LIVE</span>💄</div>
+        <div class="proj-thumb lookbook"><span class="proj-status" data-i18n="work.statusLive">LIVE</span>💄</div>
         <div class="proj-name">btcd lookbook</div>
-        <p class="proj-desc">Personal lookbook — what I wear, what I keep. A style journal on Cloudflare.</p>
+        <p class="proj-desc" data-i18n="work.lookbookDesc">Personal lookbook — what I wear, what I keep. A style journal on Cloudflare.</p>
         <div class="proj-tags"><span class="proj-tag">Next.js 16</span><span class="proj-tag">Tailwind v4</span></div>
       </a>
       <a href="#" class="proj-card">
-        <div class="proj-thumb devdict"><span class="proj-status dev">IN DEV</span>📚</div>
+        <div class="proj-thumb devdict"><span class="proj-status dev" data-i18n="work.statusDev">IN DEV</span>📚</div>
         <div class="proj-name">DevDict</div>
-        <p class="proj-desc">Vietnamese dev terminology with LLM. Q2 2026.</p>
+        <p class="proj-desc" data-i18n="work.devdictDesc">Vietnamese dev terminology with LLM. Q2 2026.</p>
         <div class="proj-tags"><span class="proj-tag">Next.js</span><span class="proj-tag">AI</span></div>
       </a>
     </div>
@@ -546,15 +555,15 @@
   <section id="games">
     <div class="games-section">
       <div class="games-header">
-        <div class="section-label">— Take a break</div>
-        <h2 class="section-title" style="margin: 0 auto;" onclick="glitchEl(this)">Chơi vài trò <span class="serif">trong khi đợi.</span></h2>
-        <p class="mode-sub" style="margin-top: 12px;">Có cả coi bói cá nhân hoá cho bạn 🔮</p>
+        <div class="section-label" data-i18n="games.label">— Take a break</div>
+        <h2 class="section-title" style="margin: 0 auto;" onclick="glitchEl(this)" data-i18n="games.title">Chơi vài trò <span class="serif">trong khi đợi.</span></h2>
+        <p class="mode-sub" style="margin-top: 12px;" data-i18n="games.sub">Có cả coi bói cá nhân hoá cho bạn 🔮</p>
       </div>
 
       <div class="games-tabs">
-        <button class="game-tab active" data-game="tarot" onclick="selectGame('tarot')">🔮 Coi bói hôm nay</button>
-        <button class="game-tab" data-game="bug" onclick="selectGame('bug')">🐛 Catch the bug</button>
-        <button class="game-tab" data-game="type" onclick="selectGame('type')">⌨️ Type the code</button>
+        <button class="game-tab active" data-game="tarot" onclick="selectGame('tarot')" data-i18n="games.tabTarot">🔮 Coi bói hôm nay</button>
+        <button class="game-tab" data-game="bug" onclick="selectGame('bug')" data-i18n="games.tabBug">🐛 Catch the bug</button>
+        <button class="game-tab" data-game="type" onclick="selectGame('type')" data-i18n="games.tabType">⌨️ Type the code</button>
       </div>
 
       <div class="game-area">
@@ -562,41 +571,41 @@
         <!-- TAROT EXPANDED -->
         <div class="game-panel active" id="game-tarot">
           <div class="tarot-game">
-            <p class="tarot-intro">Trả lời 2 câu nhỏ → vũ trụ sẽ chọn lời nhắn riêng cho bạn hôm nay. Phong cách: tích cực, validating, không có câu xấu.</p>
+            <p class="tarot-intro" data-i18n="tarot.intro">Trả lời 2 câu nhỏ → vũ trụ sẽ chọn lời nhắn riêng cho bạn hôm nay. Phong cách: tích cực, validating, không có câu xấu.</p>
             <div class="tarot-stage">
               <div class="tarot-stars" id="tarot-stars"></div>
 
               <!-- STEP 1: MOOD -->
               <div class="tarot-step active" id="tarot-step-1">
                 <div class="tarot-moon">🌙</div>
-                <div class="tarot-step-num">— STEP 1 / 3 —</div>
-                <div class="tarot-q">Hôm nay bạn đang...?</div>
-                <div class="tarot-q-sub">Chọn cái gần nhất, không có đúng sai</div>
+                <div class="tarot-step-num" data-i18n="tarot.step1">— STEP 1 / 3 —</div>
+                <div class="tarot-q" data-i18n="tarot.q1">Hôm nay bạn đang...?</div>
+                <div class="tarot-q-sub" data-i18n="tarot.q1sub">Chọn cái gần nhất, không có đúng sai</div>
                 <div class="tarot-options">
-                  <button class="tarot-opt" onclick="selectMood('soft')"><span class="tarot-opt-emoji">🌸</span><span class="tarot-opt-label">Mềm yếu, cần ôm</span></button>
-                  <button class="tarot-opt" onclick="selectMood('confused')"><span class="tarot-opt-emoji">🌀</span><span class="tarot-opt-label">Mơ hồ, không rõ</span></button>
-                  <button class="tarot-opt" onclick="selectMood('hopeful')"><span class="tarot-opt-emoji">✨</span><span class="tarot-opt-label">Có hy vọng, năng lượng</span></button>
-                  <button class="tarot-opt" onclick="selectMood('tired')"><span class="tarot-opt-emoji">🌿</span><span class="tarot-opt-label">Mệt, cần nghỉ</span></button>
+                  <button class="tarot-opt" onclick="selectMood('soft')"><span class="tarot-opt-emoji">🌸</span><span class="tarot-opt-label" data-i18n="tarot.moodSoft">Mềm yếu, cần ôm</span></button>
+                  <button class="tarot-opt" onclick="selectMood('confused')"><span class="tarot-opt-emoji">🌀</span><span class="tarot-opt-label" data-i18n="tarot.moodConfused">Mơ hồ, không rõ</span></button>
+                  <button class="tarot-opt" onclick="selectMood('hopeful')"><span class="tarot-opt-emoji">✨</span><span class="tarot-opt-label" data-i18n="tarot.moodHopeful">Có hy vọng, năng lượng</span></button>
+                  <button class="tarot-opt" onclick="selectMood('tired')"><span class="tarot-opt-emoji">🌿</span><span class="tarot-opt-label" data-i18n="tarot.moodTired">Mệt, cần nghỉ</span></button>
                 </div>
               </div>
 
               <!-- STEP 2: TOPIC -->
               <div class="tarot-step" id="tarot-step-2">
-                <div class="tarot-step-num">— STEP 2 / 3 —</div>
-                <div class="tarot-q">Bạn đang cần lời nhắn về...?</div>
-                <div class="tarot-q-sub">Vũ trụ sẽ nói riêng về chủ đề này</div>
+                <div class="tarot-step-num" data-i18n="tarot.step2">— STEP 2 / 3 —</div>
+                <div class="tarot-q" data-i18n="tarot.q2">Bạn đang cần lời nhắn về...?</div>
+                <div class="tarot-q-sub" data-i18n="tarot.q2sub">Vũ trụ sẽ nói riêng về chủ đề này</div>
                 <div class="tarot-options">
-                  <button class="tarot-opt" onclick="selectTopic('love')"><span class="tarot-opt-emoji">💖</span><span class="tarot-opt-label">Tình yêu / mối quan hệ</span></button>
-                  <button class="tarot-opt" onclick="selectTopic('career')"><span class="tarot-opt-emoji">🎯</span><span class="tarot-opt-label">Sự nghiệp / công việc</span></button>
-                  <button class="tarot-opt" onclick="selectTopic('self')"><span class="tarot-opt-emoji">🪞</span><span class="tarot-opt-label">Chính mình / nội tâm</span></button>
-                  <button class="tarot-opt" onclick="selectTopic('open')"><span class="tarot-opt-emoji">🎲</span><span class="tarot-opt-label">Mở — vũ trụ tự chọn</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('love')"><span class="tarot-opt-emoji">💖</span><span class="tarot-opt-label" data-i18n="tarot.topicLove">Tình yêu / mối quan hệ</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('career')"><span class="tarot-opt-emoji">🎯</span><span class="tarot-opt-label" data-i18n="tarot.topicCareer">Sự nghiệp / công việc</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('self')"><span class="tarot-opt-emoji">🪞</span><span class="tarot-opt-label" data-i18n="tarot.topicSelf">Chính mình / nội tâm</span></button>
+                  <button class="tarot-opt" onclick="selectTopic('open')"><span class="tarot-opt-emoji">🎲</span><span class="tarot-opt-label" data-i18n="tarot.topicOpen">Mở — vũ trụ tự chọn</span></button>
                 </div>
               </div>
 
               <!-- STEP 3: PICK CARD -->
               <div class="tarot-step" id="tarot-step-3">
-                <div class="tarot-step-num">— STEP 3 / 3 —</div>
-                <div class="tarot-q">Hít một hơi sâu.<br>Chọn 1 lá bài.</div>
+                <div class="tarot-step-num" data-i18n="tarot.step3">— STEP 3 / 3 —</div>
+                <div class="tarot-q" data-i18n="tarot.q3">Hít một hơi sâu.<br>Chọn 1 lá bài.</div>
                 <div class="tarot-context" id="tarot-context-tags"></div>
                 <div class="tarot-deck-wrap">
                   <div class="tarot-card-back" onclick="pickTarot(this)">✦</div>
@@ -612,8 +621,8 @@
 
             </div>
             <div class="game-cta">
-              <button class="btn btn-secondary" onclick="resetTarot()" id="tarot-reset" style="display:none;">🔄 Bói lại</button>
-              <button class="btn btn-primary" onclick="shareTarot()" id="tarot-share" style="display:none;">📸 Lưu ảnh</button>
+              <button class="btn btn-secondary" onclick="resetTarot()" id="tarot-reset" style="display:none;" data-i18n="tarot.again">🔄 Bói lại</button>
+              <button class="btn btn-primary" onclick="shareTarot()" id="tarot-share" style="display:none;" data-i18n="tarot.save">📸 Lưu ảnh</button>
             </div>
           </div>
         </div>
@@ -629,26 +638,26 @@
             <div class="bug-board" id="bug-board">
               <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #999; font-size: 14px;">
                 <div style="font-size: 32px; margin-bottom: 8px;">🐛</div>
-                Bấm START để bắt bug!<br>
-                <small>Rê chuột qua bug để chém — như chém trái cây 🗡️</small>
+                <span data-i18n="bug.start">Bấm START để bắt bug!</span><br>
+                <small data-i18n="bug.hint">Rê chuột qua bug để chém — như chém trái cây 🗡️</small>
               </div>
             </div>
-            <div class="game-cta"><button class="btn btn-primary" onclick="startBugGame()">▶ START</button></div>
+            <div class="game-cta"><button class="btn btn-primary" onclick="startBugGame()" data-i18n="bug.startBtn">▶ START</button></div>
           </div>
         </div>
 
         <!-- TYPE GAME -->
         <div class="game-panel" id="game-type">
           <div class="type-game">
-            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Gõ đoạn code này càng nhanh càng tốt.</p>
+            <p style="font-size: 13px; color: #666; margin-bottom: 8px;" data-i18n="type.instr">Gõ đoạn code này càng nhanh càng tốt.</p>
             <div class="type-snippet" id="type-snippet"></div>
-            <input type="text" class="type-input" id="type-input" placeholder="Bắt đầu gõ ở đây..." autocomplete="off">
+            <input type="text" class="type-input" id="type-input" placeholder="Bắt đầu gõ ở đây..." autocomplete="off" data-i18n-ph="type.placeholder">
             <div class="type-stats">
               <span>WPM: <strong id="type-wpm">0</strong></span>
               <span>Accuracy: <strong id="type-acc">100%</strong></span>
               <span>Time: <strong id="type-time">0</strong>s</span>
             </div>
-            <div class="game-cta"><button class="btn btn-primary" onclick="resetTypeGame()">🔄 Snippet mới</button></div>
+            <div class="game-cta"><button class="btn btn-primary" onclick="resetTypeGame()" data-i18n="type.newBtn">🔄 Snippet mới</button></div>
           </div>
         </div>
 
@@ -657,22 +666,22 @@
   </section>
 
   <section>
-    <div class="section-label">— Right now</div>
-    <h2 class="section-title" onclick="glitchEl(this)">What I'm <span class="serif">building.</span></h2>
+    <div class="section-label" data-i18n="now.label">— Right now</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="now.title">What I'm <span class="serif">building.</span></h2>
     <div class="now-card">
-      <div class="now-status"><span class="now-dot"></span><span>Active · 2h ago</span></div>
-      <div class="now-text">Mình đang build <span class="serif">DevDict</span> — Vietnamese dev terminology với LLM-powered explanations.</div>
-      <div class="now-progress"><div class="now-bar"><div class="now-fill"></div></div><div class="now-meta"><span>67% — đang code search + AI</span><span>Launch Q2 2026</span></div></div>
+      <div class="now-status"><span class="now-dot"></span><span data-i18n="now.active">Active · 2h ago</span></div>
+      <div class="now-text" data-i18n="now.text">Mình đang build <span class="serif">DevDict</span> — Vietnamese dev terminology với LLM-powered explanations.</div>
+      <div class="now-progress"><div class="now-bar"><div class="now-fill"></div></div><div class="now-meta"><span data-i18n="now.progress">67% — đang code search + AI</span><span data-i18n="now.launch">Launch Q2 2026</span></div></div>
     </div>
   </section>
 
   <section>
-    <div class="section-label">— Proof of work</div>
-    <h2 class="section-title" onclick="glitchEl(this)">GitHub doesn't <span class="serif">lie.</span></h2>
+    <div class="section-label" data-i18n="gh.label">— Proof of work</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="gh.title">GitHub doesn't <span class="serif">lie.</span></h2>
     <div class="gh-card">
       <div class="gh-header">
-        <div class="gh-stat"><strong>847</strong> commits năm nay</div>
-        <div class="gh-stat">🔥 Streak: <strong>34 ngày</strong></div>
+        <div class="gh-stat" data-i18n="gh.commits"><strong>847</strong> commits năm nay</div>
+        <div class="gh-stat" data-i18n="gh.streak">🔥 Streak: <strong>34 ngày</strong></div>
         <div class="gh-stat"><a href="https://github.com/buithicamdan07081999" target="_blank" style="color: #E94560; text-decoration: none; font-weight: 500;">@buithicamdan07081999 →</a></div>
       </div>
       <div class="gh-grid" id="gh-grid"></div>
@@ -681,34 +690,34 @@
 
   <!-- TOOLS - REVISED IDEAS -->
   <section id="tools">
-    <div class="section-label">— Free tools (soon)</div>
-    <h2 class="section-title" onclick="glitchEl(this)">Mini tools mình <span class="serif">đang build.</span></h2>
+    <div class="section-label" data-i18n="tools.label">— Free tools (soon)</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="tools.title">Mini tools mình <span class="serif">đang build.</span></h2>
     <div class="tools-grid">
-      <div class="tool-card"><div class="tool-icon pink">🔮</div><div class="tool-info"><div class="tool-name">Tarot Dev — bản full</div><div class="tool-desc">Standalone version, có 22 lá, share link kết quả</div></div></div>
-      <div class="tool-card"><div class="tool-icon cream">💄</div><div class="tool-info"><div class="tool-name">btcd lookbook generator</div><div class="tool-desc">Upload outfit → AI viết caption vô tri</div></div></div>
-      <div class="tool-card"><div class="tool-icon mint">🍱</div><div class="tool-info"><div class="tool-name">Lunch decider</div><div class="tool-desc">Hỏi 3 câu → rec quán trưa quanh chỗ bạn</div></div></div>
-      <div class="tool-card"><div class="tool-icon purple">💌</div><div class="tool-info"><div class="tool-name">Thư gửi mình 1 năm sau</div><div class="tool-desc">Auto gửi đúng ngày này năm sau</div></div></div>
+      <div class="tool-card"><div class="tool-icon pink">🔮</div><div class="tool-info"><div class="tool-name" data-i18n="tools.t1name">Tarot Dev — bản full</div><div class="tool-desc" data-i18n="tools.t1desc">Standalone version, có 22 lá, share link kết quả</div></div></div>
+      <div class="tool-card"><div class="tool-icon cream">💄</div><div class="tool-info"><div class="tool-name" data-i18n="tools.t2name">btcd lookbook generator</div><div class="tool-desc" data-i18n="tools.t2desc">Upload outfit → AI viết caption vô tri</div></div></div>
+      <div class="tool-card"><div class="tool-icon mint">🍱</div><div class="tool-info"><div class="tool-name" data-i18n="tools.t3name">Lunch decider</div><div class="tool-desc" data-i18n="tools.t3desc">Hỏi 3 câu → rec quán trưa quanh chỗ bạn</div></div></div>
+      <div class="tool-card"><div class="tool-icon purple">💌</div><div class="tool-info"><div class="tool-name" data-i18n="tools.t4name">Thư gửi mình 1 năm sau</div><div class="tool-desc" data-i18n="tools.t4desc">Auto gửi đúng ngày này năm sau</div></div></div>
     </div>
   </section>
 
   <!-- NOTES - VÔ TRI VERSION -->
   <section>
-    <div class="section-label">— Notes to self</div>
-    <h2 class="section-title" onclick="glitchEl(this)">Mấy điều mình <span class="serif">tự nhắc.</span></h2>
+    <div class="section-label" data-i18n="notes.label">— Notes to self</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="notes.title">Mấy điều mình <span class="serif">tự nhắc.</span></h2>
     <div class="notes-grid">
-      <div class="note pink">"Paris by night cũng không bằng you by my side."<div class="note-date">VÔ TRI #01</div></div>
-      <div class="note cream">"Nhìn lên không bằng ai, nhìn xuống thấy mình."<div class="note-date">VÔ TRI #02</div></div>
-      <div class="note mint">"Giải quyết được thì không gì phải lo, không giải quyết được thì lo làm gì."<div class="note-date">VÔ TRI #03</div></div>
-      <div class="note purple">"Việc gì người ta làm được, chắc gì mình làm được. Việc gì người ta làm được thì để người ta làm."<div class="note-date">VÔ TRI #04</div></div>
+      <div class="note pink" data-i18n="notes.n1">"Paris by night cũng không bằng you by my side."<div class="note-date">VÔ TRI #01</div></div>
+      <div class="note cream" data-i18n="notes.n2">"Nhìn lên không bằng ai, nhìn xuống thấy mình."<div class="note-date">VÔ TRI #02</div></div>
+      <div class="note mint" data-i18n="notes.n3">"Giải quyết được thì không gì phải lo, không giải quyết được thì lo làm gì."<div class="note-date">VÔ TRI #03</div></div>
+      <div class="note purple" data-i18n="notes.n4">"Việc gì người ta làm được, chắc gì mình làm được. Việc gì người ta làm được thì để người ta làm."<div class="note-date">VÔ TRI #04</div></div>
     </div>
   </section>
 
   <section>
-    <div class="section-label">— Currently</div>
-    <h2 class="section-title" onclick="glitchEl(this)">Reading & <span class="serif">listening.</span></h2>
+    <div class="section-label" data-i18n="vibe.label">— Currently</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="vibe.title">Reading & <span class="serif">listening.</span></h2>
     <div class="vibe-grid">
       <div class="vibe-card">
-        <div class="vibe-header"><div class="vibe-icon">📚</div><div class="vibe-title">Đang đọc</div></div>
+        <div class="vibe-header"><div class="vibe-icon">📚</div><div class="vibe-title" data-i18n="vibe.reading">Đang đọc</div></div>
         <div class="vibe-list">
           <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#1A1A1A,#444)"></div><div class="vibe-info"><div class="vibe-name">Atomic Habits</div><div class="vibe-sub">James Clear</div></div></div>
           <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#FFD1DC,#FFE4EC)"></div><div class="vibe-info"><div class="vibe-name">Designing Data-Intensive Apps</div><div class="vibe-sub">Martin Kleppmann</div></div></div>
@@ -716,7 +725,7 @@
         </div>
       </div>
       <div class="vibe-card">
-        <div class="vibe-header"><div class="vibe-icon">🎵</div><div class="vibe-title">Đang nghe</div></div>
+        <div class="vibe-header"><div class="vibe-icon">🎵</div><div class="vibe-title" data-i18n="vibe.listening">Đang nghe</div></div>
         <div class="vibe-list">
           <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#1DB954,#0F6E56)"></div><div class="vibe-info"><div class="vibe-name">Lo-fi for coding</div><div class="vibe-sub">Spotify</div></div></div>
           <div class="vibe-item"><div class="vibe-thumb" style="background: linear-gradient(135deg,#E94560,#B91C5C)"></div><div class="vibe-info"><div class="vibe-name">Lover - Taylor Swift</div><div class="vibe-sub">Loop on</div></div></div>
@@ -727,44 +736,44 @@
   </section>
 
   <section id="hire">
-    <div class="section-label">— Work with me</div>
-    <h2 class="section-title" onclick="glitchEl(this)">Hire me <span class="serif">for these.</span></h2>
+    <div class="section-label" data-i18n="hire.label">— Work with me</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="hire.title">Hire me <span class="serif">for these.</span></h2>
     <div class="hire-grid">
-      <div class="hire-card"><div class="hire-tag">CONTENT COLLAB</div><div class="hire-name">Brand collab IG/TikTok</div><div class="hire-price">Liên hệ</div><div class="hire-desc">1 reel review. Audience dev + lifestyle.</div></div>
-      <div class="hire-card featured"><div class="hire-tag">⭐ POPULAR</div><div class="hire-name">Code 1 landing page</div><div class="hire-price">từ 3M</div><div class="hire-desc">Design + code Next.js + deploy. Có quiz + tarot như mình.</div></div>
-      <div class="hire-card"><div class="hire-tag">1-1 SESSION</div><div class="hire-name">Coffee chat 60'</div><div class="hire-price">500k</div><div class="hire-desc">Career advice cho dev. Chat về Next.js, AI.</div></div>
+      <div class="hire-card"><div class="hire-tag" data-i18n="hire.c1tag">CONTENT COLLAB</div><div class="hire-name" data-i18n="hire.c1name">Brand collab IG/TikTok</div><div class="hire-price" data-i18n="hire.c1price">Liên hệ</div><div class="hire-desc" data-i18n="hire.c1desc">1 reel review. Audience dev + lifestyle.</div></div>
+      <div class="hire-card featured"><div class="hire-tag" data-i18n="hire.c2tag">⭐ POPULAR</div><div class="hire-name" data-i18n="hire.c2name">Code 1 landing page</div><div class="hire-price" data-i18n="hire.c2price">từ 3M</div><div class="hire-desc" data-i18n="hire.c2desc">Design + code Next.js + deploy. Có quiz + tarot như mình.</div></div>
+      <div class="hire-card"><div class="hire-tag" data-i18n="hire.c3tag">1-1 SESSION</div><div class="hire-name" data-i18n="hire.c3name">Coffee chat 60'</div><div class="hire-price" data-i18n="hire.c3price">500k</div><div class="hire-desc" data-i18n="hire.c3desc">Career advice cho dev. Chat về Next.js, AI.</div></div>
     </div>
   </section>
 
   <section>
     <div class="nl-card">
       <div class="nl-icon">💌</div>
-      <div class="nl-title">Email <span class="serif">vô tri có ích</span></div>
-      <div class="nl-desc">Mỗi chủ nhật mình gửi 1 email: 1 chuyện đời lầy + 1 bài học dev. 3 phút, không spam.</div>
+      <div class="nl-title" data-i18n="nl.title">Email <span class="serif">vô tri có ích</span></div>
+      <div class="nl-desc" data-i18n="nl.desc">Mỗi chủ nhật mình gửi 1 email: 1 chuyện đời lầy + 1 bài học dev. 3 phút, không spam.</div>
       <div class="nl-form">
-        <input type="email" class="nl-input" placeholder="your@email.com">
-        <button class="nl-btn" onclick="celebrateSignup()">Đăng ký</button>
+        <input type="email" class="nl-input" placeholder="your@email.com" data-i18n-ph="nl.placeholder">
+        <button class="nl-btn" onclick="celebrateSignup()" data-i18n="nl.btn">Đăng ký</button>
       </div>
-      <div class="nl-meta">+ 1,247 người đã đăng ký · unsubscribe bất cứ lúc nào</div>
+      <div class="nl-meta" data-i18n="nl.meta">+ 1,247 người đã đăng ký · unsubscribe bất cứ lúc nào</div>
     </div>
   </section>
 
   <section>
-    <div class="section-label">— Live feed</div>
-    <h2 class="section-title" onclick="glitchEl(this)">Đang có gì <span class="serif">xảy ra.</span></h2>
+    <div class="section-label" data-i18n="feed.label">— Live feed</div>
+    <h2 class="section-title" onclick="glitchEl(this)" data-i18n="feed.title">Đang có gì <span class="serif">xảy ra.</span></h2>
     <div class="feed-card">
       <div class="feed-list">
-        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Có người vừa coi bói được lá "The Soft Bloom" 🌸</div><div class="feed-time">2 phút trước</div></div>
-        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Match 99% ở Crush Mode 💕</div><div class="feed-time">14 phút trước</div></div>
-        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">28 người coi bói trong 24h qua 🔮</div><div class="feed-time">1 giờ trước</div></div>
-        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Newsletter có thêm 8 subscriber</div><div class="feed-time">2 giờ trước</div></div>
-        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text">Ai đó vừa bắt 47 con bug 🐛</div><div class="feed-time">3 giờ trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text" data-i18n="feed.t1">Có người vừa coi bói được lá "The Soft Bloom" 🌸</div><div class="feed-time" data-i18n="feed.time1">2 phút trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text" data-i18n="feed.t2">Match 99% ở Crush Mode 💕</div><div class="feed-time" data-i18n="feed.time2">14 phút trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text" data-i18n="feed.t3">28 người coi bói trong 24h qua 🔮</div><div class="feed-time" data-i18n="feed.time3">1 giờ trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text" data-i18n="feed.t4">Newsletter có thêm 8 subscriber</div><div class="feed-time" data-i18n="feed.time4">2 giờ trước</div></div>
+        <div class="feed-item"><div class="feed-dot"></div><div class="feed-text" data-i18n="feed.t5">Ai đó vừa bắt 47 con bug 🐛</div><div class="feed-time" data-i18n="feed.time5">3 giờ trước</div></div>
       </div>
     </div>
   </section>
 
   <footer id="contact">
-    <p class="footer-quote" onclick="glitchEl(this)">"Dev là đẹp. Cute là kiêu. Cả hai đều không thể thiếu."</p>
+    <p class="footer-quote" onclick="glitchEl(this)" data-i18n="footer.quote">"Dev là đẹp. Cute là kiêu. Cả hai đều không thể thiếu."</p>
     <div class="socials">
       <a href="https://github.com/buithicamdan07081999" target="_blank">GitHub</a>
       <a href="https://www.linkedin.com/in/buidan99/" target="_blank">LinkedIn</a>
@@ -772,15 +781,15 @@
       <a href="https://www.instagram.com/btcd__/" target="_blank">Instagram</a>
       <a href="mailto:btcdan789@gmail.com">btcdan789@gmail.com</a>
     </div>
-    <p class="copy">© 2026 btcd.dev · Built with caffeine, Next.js & lipstick</p>
-    <p class="konami-hint">↑↑↓↓←→←→ to unlock secret 🤫</p>
+    <p class="copy" data-i18n="footer.copy">© 2026 btcd.dev · Built with caffeine, Next.js & lipstick</p>
+    <p class="konami-hint" data-i18n="footer.konami">↑↑↓↓←→←→ to unlock secret 🤫</p>
   </footer>
 
 </div>
 
 <div class="easter-egg" id="easter-egg" onclick="this.classList.remove('show')">
-  🎉 You found the secret! <br>
-  <small style="opacity: 0.9;">Email "konami" tới btcdan789@gmail.com để nhận coffee chat 50% off</small>
+  <span data-i18n="egg.title">🎉 You found the secret!</span> <br>
+  <small style="opacity: 0.9;" data-i18n="egg.desc">Email "konami" tới btcdan789@gmail.com để nhận coffee chat 50% off</small>
 </div>
 
 <script>
@@ -828,7 +837,8 @@ function popEmoji(el, emoji) {
     setTimeout(() => p.remove(), 1100);
   }
 }
-const statuses = ['Online. Đang ship code hoặc ship outfit.','Đang fix bug. Hoặc đang fix outfit.','Caffeine: 200%. Productivity: ¯\\_(ツ)_/¯','Status: sầu bíu ti full.','Tôi không bị burnout, tôi chỉ rất phong cách.'];
+let LANG = 'vi';
+let statuses = [];
 let statusIdx=0;
 function toggleStatus() { statusIdx=(statusIdx+1)%statuses.length; document.getElementById('status-text').textContent = statuses[statusIdx]; }
 function scrollToGames() { selectGame('tarot'); document.getElementById('games').scrollIntoView({behavior:'smooth'}); }
@@ -853,20 +863,20 @@ const counterObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 counters.forEach(c => counterObs.observe(c));
 
-// QUIZ (giữ nguyên)
-const hrQuestions=[{q:'Team của bạn dùng tech stack gì?',options:[{emoji:'⚛️',text:'React/Next.js + Node',score:10},{emoji:'🔥',text:'Vue/Nuxt',score:9},{emoji:'🌐',text:'.NET / C# backend',score:8},{emoji:'🤔',text:'Stack khác',score:6}]},{q:'Phong cách làm việc?',options:[{emoji:'🎯',text:'Async-first',score:10},{emoji:'🤝',text:'Hybrid',score:9},{emoji:'📞',text:'Call nhiều',score:5},{emoji:'🏢',text:'Onsite',score:4}]},{q:'Role này là...',options:[{emoji:'💻',text:'Frontend / Fullstack với UX focus',score:10},{emoji:'🤖',text:'AI / Prompt Engineering',score:10},{emoji:'⚙️',text:'Backend / DevOps',score:7},{emoji:'📊',text:'Data / ML',score:5}]},{q:'Cần onsite?',options:[{emoji:'🌍',text:'Fully remote',score:10},{emoji:'✈️',text:'Remote-first',score:9},{emoji:'🏙️',text:'Hybrid (HCMC)',score:8},{emoji:'🏢',text:'5 ngày/tuần',score:3}]},{q:'Văn hoá team?',options:[{emoji:'🚀',text:'Move fast, ship daily',score:10},{emoji:'🎨',text:'Craft & quality',score:10},{emoji:'📈',text:'OKR-heavy',score:7},{emoji:'👔',text:'Process-heavy',score:4}]},{q:'Ngoài code đóng góp?',options:[{emoji:'🎨',text:'Design + UX',score:10},{emoji:'📝',text:'Content',score:9},{emoji:'🎤',text:'Speaking',score:8},{emoji:'🧪',text:'Chỉ code',score:6}]},{q:'Quan trọng nhất ở candidate?',options:[{emoji:'🧠',text:'Tư duy sản phẩm',score:10},{emoji:'💎',text:'Craftsmanship',score:10},{emoji:'⚡',text:'Tốc độ ship',score:8},{emoji:'📜',text:'Bằng cấp',score:4}]}];
-const gfQuestions=[{q:'Gặp lần đầu rủ đi...?',options:[{emoji:'☕',text:'Cafe yên tĩnh',score:10},{emoji:'🍜',text:'Quán mì ngon',score:9},{emoji:'🎬',text:'Xem phim',score:6},{emoji:'🍻',text:'Bar đông',score:5}]},{q:'11h đêm "không ngủ được"?',options:[{emoji:'🌙',text:'Gọi voice call',score:10},{emoji:'💬',text:'Nhắn đến khi mình ngủ',score:9},{emoji:'🎵',text:'Gửi 1 bài nhạc',score:8},{emoji:'😴',text:'Mai trả lời',score:4}]},{q:'Mình diện outfit lố?',options:[{emoji:'😍',text:'Khen thật lòng',score:10},{emoji:'📸',text:'Chụp ảnh cho mình',score:10},{emoji:'🤨',text:'"Em mặc gì kỳ vậy?"',score:2},{emoji:'🫣',text:'Đi cách 2m',score:3}]},{q:'Mình code đến 2h sáng?',options:[{emoji:'🍵',text:'Pha trà ngồi cạnh',score:10},{emoji:'😘',text:'Hôn trán',score:10},{emoji:'📺',text:'Ngủ trước',score:7},{emoji:'😤',text:'Giận',score:4}]},{q:'Love language?',options:[{emoji:'🎁',text:'Gifts',score:10},{emoji:'🫂',text:'Touch',score:10},{emoji:'💬',text:'Words',score:9},{emoji:'🤝',text:'Acts',score:9}]},{q:'Mình kể vô tri 15 phút?',options:[{emoji:'🤣',text:'Cười sặc, hỏi thêm',score:10},{emoji:'👂',text:'Nghe chăm chú',score:9},{emoji:'😐',text:'"Ờ" đổi chủ đề',score:3},{emoji:'📱',text:'Lướt phone',score:2}]},{q:'Tương lai?',options:[{emoji:'🏡',text:'Nhà nhỏ, mèo',score:10},{emoji:'✈️',text:'Freelance tự do',score:10},{emoji:'🤷',text:'Ngày nào hay ngày đó',score:5},{emoji:'💰',text:'Tiền nhiều',score:4}]}];
-function getHrResult(s){const p=Math.round((s/70)*100);if(p>=85)return{emoji:'🎯',tag:'STRONG MATCH',title:'<span class="serif">Cú lừa hoàn hảo</span>',desc:'Match cao.',code:`{ <span class="key">"verdict"</span>: <span class="val">"strong_match"</span> }`,cta1:'Email mình',cta2:'CV',percent:p};if(p>=65)return{emoji:'🤝',tag:'GOOD FIT',title:'<span class="serif">Nói chuyện được</span>',desc:'Đáng gặp cafe.',code:`{ <span class="key">"verdict"</span>: <span class="val">"good_fit"</span> }`,cta1:'Gửi JD',cta2:'CV',percent:p};if(p>=45)return{emoji:'🤔',tag:'MAYBE',title:'<span class="serif">Cần bàn thêm</span>',desc:'Cho thêm info.',code:`{ <span class="key">"verdict"</span>: <span class="val">"need_info"</span> }`,cta1:'Liên hệ',cta2:'Lại',percent:p};return{emoji:'🙏',tag:'NOT THIS TIME',title:'<span class="serif">Không lần này</span>',desc:'Stack không match.',code:`{ <span class="key">"verdict"</span>: <span class="val">"not_fit"</span> }`,cta1:'OK',cta2:'Lại',percent:p};}
-function getGfResult(s){const p=Math.round((s/70)*100);if(p>=85)return{emoji:'💕',tag:'SOULMATE',title:'<span class="serif">Định mệnh</span>',desc:'Nhắn IG.',meta:{vibe:'Endgame',song:'Lover',match:p+'%'},cta1:'Nhắn IG',cta2:'Lại',percent:p};if(p>=65)return{emoji:'😊',tag:'CRUSHABLE',title:'<span class="serif">Crush được</span>',desc:'Cafe?',meta:{vibe:'Crushable',song:'I Like Me Better',match:p+'%'},cta1:'Rủ cafe',cta2:'Lại',percent:p};if(p>=45)return{emoji:'🤝',tag:'FRIENDZONE',title:'<span class="serif">Làm bạn hợp hơn</span>',desc:'Bạn 10/10.',meta:{vibe:'Friends',song:'Friends',match:p+'%'},cta1:'Kết bạn',cta2:'Lại',percent:p};return{emoji:'😅',tag:'OOF',title:'<span class="serif">Không hợp</span>',desc:'Khác nhau quá.',meta:{vibe:'Pass',song:'thank u, next',match:p+'%'},cta1:'OK',cta2:'Lại',percent:p};}
+// QUIZ — data populated per-language by setLang()
+let hrQuestions=[];
+let gfQuestions=[];
+function getHrResult(s){const p=Math.round((s/70)*100);const idx=p>=85?0:p>=65?1:p>=45?2:3;const emoji=['🎯','🤝','🤔','🙏'][idx];const verdict=['strong_match','good_fit','need_info','not_fit'][idx];const t=I18N[LANG].hrResults[idx];return{emoji,tag:t.tag,title:`<span class="serif">${t.title}</span>`,desc:t.desc,code:`{ <span class="key">"verdict"</span>: <span class="val">"${verdict}"</span> }`,cta1:t.cta1,cta2:t.cta2,percent:p};}
+function getGfResult(s){const p=Math.round((s/70)*100);const idx=p>=85?0:p>=65?1:p>=45?2:3;const emoji=['💕','😊','🤝','😅'][idx];const song=['Lover','I Like Me Better','Friends','thank u, next'][idx];const t=I18N[LANG].gfResults[idx];return{emoji,tag:t.tag,title:`<span class="serif">${t.title}</span>`,desc:t.desc,meta:{vibe:t.vibe,song,match:p+'%'},cta1:t.cta1,cta2:t.cta2,percent:p};}
 let mode=null,qi=0,total=0;
 function startQuiz(m){mode=m;qi=0;total=0;document.body.className='mode-'+m;document.getElementById('mode-cards-wrapper').style.display='none';document.getElementById('quiz-'+m).classList.add('show');renderQuiz();setTimeout(()=>document.getElementById('quiz-'+m).scrollIntoView({behavior:'smooth'}),100);}
 function backToMode(){document.body.className='';document.getElementById('mode-cards-wrapper').style.display='';document.getElementById('quiz-hr').classList.remove('show');document.getElementById('quiz-gf').classList.remove('show');}
-function renderQuiz(){const qs=mode==='hr'?hrQuestions:gfQuestions;const pf=document.getElementById('progress-'+mode);const c=document.getElementById('quiz-content-'+mode);if(qi<qs.length){pf.style.width=(qi/qs.length*100)+'%';const cur=qs[qi];c.innerHTML=`<div class="q-number">CÂU ${qi+1} / ${qs.length}</div><div class="q-text">${cur.q}</div><div class="options">${cur.options.map(o=>`<button class="option" onclick="selOpt(${o.score})"><span class="emoji">${o.emoji}</span><span>${o.text}</span></button>`).join('')}</div>`;}else{pf.style.width='100%';showQuizResult();}}
+function renderQuiz(){const qs=mode==='hr'?hrQuestions:gfQuestions;const pf=document.getElementById('progress-'+mode);const c=document.getElementById('quiz-content-'+mode);if(qi<qs.length){pf.style.width=(qi/qs.length*100)+'%';const cur=qs[qi];c.innerHTML=`<div class="q-number">${I18N[LANG].t['quiz.qNum']} ${qi+1} / ${qs.length}</div><div class="q-text">${cur.q}</div><div class="options">${cur.options.map(o=>`<button class="option" onclick="selOpt(${o.score})"><span class="emoji">${o.emoji}</span><span>${o.text}</span></button>`).join('')}</div>`;}else{pf.style.width='100%';showQuizResult();}}
 function selOpt(s){total+=s;qi++;setTimeout(renderQuiz,200);}
 function showQuizResult(){const c=document.getElementById('quiz-content-'+mode);const r=mode==='hr'?getHrResult(total):getGfResult(total);if(mode==='hr'){c.innerHTML=`<div class="result-card"><div class="result-emoji">${r.emoji}</div><div class="result-tag hr">${r.tag}</div><div class="result-title">${r.title}</div><div class="score-meter"><div class="score-label">MATCH</div><div class="score-bar"><div class="score-fill" id="sf"></div></div><div class="score-num"><span id="sn">0</span>%</div></div><p class="result-desc">${r.desc}</p><div class="code-block">${r.code}</div><div class="cta-result"><a href="mailto:btcdan789@gmail.com" class="btn btn-primary">${r.cta1}</a><a href="https://portfolio-3oa.pages.dev" target="_blank" class="btn btn-secondary">${r.cta2}</a></div></div>`;}else{c.innerHTML=`<div class="result-card"><div class="result-emoji">${r.emoji}</div><div class="result-tag gf">${r.tag}</div><div class="result-title">${r.title}</div><div class="score-meter"><div class="score-label">VIBE MATCH</div><div class="score-bar"><div class="score-fill" id="sf"></div></div><div class="score-num"><span id="sn">0</span>%</div></div><p class="result-desc">${r.desc}</p><div class="result-meta"><div class="result-meta-item"><div class="result-meta-label">VIBE</div><div class="result-meta-val">${r.meta.vibe}</div></div><div class="result-meta-item"><div class="result-meta-label">SONG</div><div class="result-meta-val">${r.meta.song}</div></div><div class="result-meta-item"><div class="result-meta-label">MATCH</div><div class="result-meta-val">${r.meta.match}</div></div></div><div class="cta-result"><a href="https://www.instagram.com/btcd__/" target="_blank" class="btn btn-primary">${r.cta1}</a><button class="btn btn-secondary" onclick="backToMode()">${r.cta2}</button></div></div>`;}if(r.percent>=65)launchConfetti();setTimeout(()=>{document.getElementById('sf').style.width=r.percent+'%';let cur=0,step=r.percent/30;const t=setInterval(()=>{cur+=step;if(cur>=r.percent){cur=r.percent;clearInterval(t);}document.getElementById('sn').textContent=Math.round(cur);},40);},100);}
 
 function launchConfetti(){const colors=['#E94560','#FFD1DC','#FFF4D6','#1A1A1A','#1DB954'];for(let i=0;i<50;i++){setTimeout(()=>{const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.top='-10px';c.style.background=colors[Math.floor(Math.random()*colors.length)];c.style.transform=`rotate(${Math.random()*360}deg)`;c.style.animationDuration=(2+Math.random()*2)+'s';c.style.borderRadius=Math.random()>0.5?'50%':'0';document.body.appendChild(c);setTimeout(()=>c.remove(),4000);},i*30);}}
-function celebrateSignup(){launchConfetti();alert('Cảm ơn! 💌');}
+function celebrateSignup(){launchConfetti();alert(I18N[LANG].t['nl.alert']);}
 
 const grid=document.getElementById('gh-grid');
 for(let i=0;i<26*7;i++){const cell=document.createElement('div');cell.className='gh-cell';const r=Math.random();if(r>0.85)cell.classList.add('l4');else if(r>0.7)cell.classList.add('l3');else if(r>0.5)cell.classList.add('l2');else if(r>0.3)cell.classList.add('l1');grid.appendChild(cell);}
@@ -952,7 +962,7 @@ function endBugGame(){
     newHigh=true;
     launchConfetti();
   }
-  document.getElementById('bug-board').innerHTML=`<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;"><div style="font-size: 36px; margin-bottom: 8px;">🎉</div><div style="font-size: 18px; font-weight: 600;">Score: ${bugScore}</div><div style="font-size: 12px; color: #999; margin-top: 4px;">${newHigh?'🏆 NEW HIGH SCORE!':'Bấm START chơi lại'}</div></div>`;
+  document.getElementById('bug-board').innerHTML=`<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;"><div style="font-size: 36px; margin-bottom: 8px;">🎉</div><div style="font-size: 18px; font-weight: 600;">Score: ${bugScore}</div><div style="font-size: 12px; color: #999; margin-top: 4px;">${newHigh?I18N[LANG].t['bug.newHigh']:I18N[LANG].t['bug.playAgain']}</div></div>`;
 }
 
 // TYPE
@@ -977,46 +987,13 @@ function initTarotStars() {
   }
 }
 
-// Tarot cards: lời tiên tri thay đổi theo mood + topic
-const tarotCards = [
-  { roman: 'I', emoji: '🌸', name: 'The Soft Bloom', subtitle: 'Lá của tự thương' },
-  { roman: 'II', emoji: '🦋', name: 'The Becoming', subtitle: 'Lá của thay đổi' },
-  { roman: 'III', emoji: '✨', name: 'The Glow', subtitle: 'Lá của ánh sáng' },
-  { roman: 'IV', emoji: '🌙', name: 'The Inner Voice', subtitle: 'Lá của trực giác' },
-  { roman: 'V', emoji: '💖', name: 'The Heart', subtitle: 'Lá của tình thương' },
-  { roman: 'VI', emoji: '🎯', name: 'The Clarity', subtitle: 'Lá của định hướng' },
-  { roman: 'VII', emoji: '🌿', name: 'The Pause', subtitle: 'Lá của nghỉ ngơi' },
-  { roman: 'VIII', emoji: '🔥', name: 'The Spark', subtitle: 'Lá của hành động' },
-  { roman: 'IX', emoji: '🌈', name: 'The After Rain', subtitle: 'Lá của hồi phục' },
-  { roman: 'X', emoji: '👑', name: 'The Sovereign', subtitle: 'Lá của tự chủ' },
-];
+// Tarot cards + prophecies — populated per-language by setLang()
+let tarotCards = [];
 
-// Prophecies map: mood × topic
-const prophecies = {
-  // SOFT
-  soft_love: { p: 'Trái tim mềm không phải yếu đuối, mà là dấu hiệu của một người biết yêu sâu. Người đáng có bạn sẽ trân trọng cả phần dễ tổn thương đó.', a: 'Mình xứng đáng được yêu cả khi mình mệt nhất.' },
-  soft_career: { p: 'Hôm nay bạn không cần phải làm thật to. Một việc nhỏ làm trọn vẹn cũng đủ tỏa sáng. Chậm không phải là thua.', a: 'Tiến bộ của mình không cần ai chấm điểm.' },
-  soft_self: { p: 'Bạn đang đối xử khắt khe với chính mình hơn là với người khác. Hãy nói chuyện với bản thân như nói với một người bạn thân đang buồn.', a: 'Mình được phép nghỉ. Mình được phép sai.' },
-  soft_open: { p: 'Cảm xúc bạn đang có là hợp lý. Không cần fix, không cần giải thích. Cho phép mình mềm hôm nay — đó cũng là một dạng mạnh mẽ.', a: 'Mình ổn ngay cả khi mình không ổn.' },
-  // CONFUSED
-  confused_love: { p: 'Không biết là ai đó có yêu mình thật không? Câu trả lời nằm ở cảm giác của bạn khi ở cạnh họ — bạn có được là chính mình không?', a: 'Mình không cần biết hết câu trả lời ngay hôm nay.' },
-  confused_career: { p: 'Bạn đang đứng giữa nhiều lựa chọn. Lá này nói: lựa chọn nào khiến bạn THỞ NHẸ HƠN khi nghĩ tới — chọn cái đó. Cơ thể biết trước trí óc.', a: 'Mỗi bước đi đều dẫn mình đến đúng chỗ.' },
-  confused_self: { p: 'Bạn không phải đang lạc — bạn đang ở trong một transition. Lạc đường là khi đứng yên. Bạn vẫn đang đi, nên bạn vẫn đang đúng hướng.', a: 'Mình tin vào hành trình ngay cả khi chưa thấy đích.' },
-  confused_open: { p: 'Khi mọi thứ mờ mịt, hãy hỏi: "3 năm tới mình muốn cảm thấy thế nào?" Câu trả lời cho câu đó sẽ chỉ đường cho hôm nay.', a: 'Sự mơ hồ là không gian để điều mới được sinh ra.' },
-  // HOPEFUL
-  hopeful_love: { p: 'Năng lượng bạn đang phát ra hôm nay sẽ thu hút đúng người. Đừng kìm lại. Cứ rạng rỡ. Người dành cho bạn sẽ nhận ra.', a: 'Mình xứng đáng có người yêu mình như mình yêu họ.' },
-  hopeful_career: { p: 'Đây là cửa sổ vàng. Ý tưởng bạn đang ấp ủ — START đi. Lá này nói: "Done is better than perfect". Hôm nay là ngày của bạn.', a: 'Mình tin vào ý tưởng của mình hơn là sợ hãi của mình.' },
-  hopeful_self: { p: 'Bạn đang trên đà glow up. Người khác chưa thấy nhưng vũ trụ thấy. 3 tháng tới sẽ có khoảnh khắc bạn nhìn lại và biết ơn quyết định hôm nay.', a: 'Mình đang trở thành phiên bản mình tự hào.' },
-  hopeful_open: { p: 'Năng lượng bạn có hôm nay là quà. Dùng nó để bắt đầu cái bạn đã hoãn lâu rồi. Một câu nhắn, một dòng code, một bước chân.', a: 'Hôm nay là một ngày tốt để dám.' },
-  // TIRED
-  tired_love: { p: 'Bạn không cần phải "always available" để được yêu. Người yêu bạn thật sẽ hiểu khi bạn cần không gian. Hãy cho phép mình rút lui.', a: 'Mình được phép nghỉ trong tình yêu.' },
-  tired_career: { p: 'Burnout không phải lỗi của bạn — nó là thông điệp. Cơ thể đang xin nghỉ. Lá này yêu cầu bạn: tắt máy đi, mai làm tiếp. Productivity sẽ về.', a: 'Nghỉ ngơi là một dạng tiến bộ.' },
-  tired_self: { p: 'Bạn không bị "kém đi", bạn chỉ đang cần sạc. Cái cây cần mùa đông để mùa xuân nở. Hãy nghỉ mà không tội lỗi. Bạn đáng có điều đó.', a: 'Mình đủ ngay cả khi mình không làm gì.' },
-  tired_open: { p: 'Cơ thể đang nói chuyện với bạn. Lắng nghe nó. Ngủ thêm 1 tiếng, uống thêm 1 ly nước, đi bộ 10 phút. Đó là tất cả việc bạn cần làm hôm nay.', a: 'Mình ưu tiên bản thân không cần xin lỗi.' },
-};
-
-const moodLabels = { soft: '🌸 Mềm yếu', confused: '🌀 Mơ hồ', hopeful: '✨ Hy vọng', tired: '🌿 Mệt mỏi' };
-const topicLabels = { love: '💖 Tình yêu', career: '🎯 Sự nghiệp', self: '🪞 Chính mình', open: '🎲 Mở' };
+// Prophecies map (mood × topic), mood/topic labels — populated per-language by setLang()
+let prophecies = {};
+let moodLabels = {};
+let topicLabels = {};
 
 let userMood = null, userTopic = null, currentCard = null;
 function selectMood(m) {
@@ -1057,13 +1034,13 @@ function pickTarot(el) {
       </div>
       <div class="tarot-prophecy">"${prop.p}"</div>
       <div class="tarot-affirm">
-        <div class="tarot-affirm-label">— AFFIRMATION HÔM NAY —</div>
+        <div class="tarot-affirm-label">${I18N[LANG].t['tarot.affirmLabel']}</div>
         <div class="tarot-affirm-text">"${prop.a}"</div>
       </div>
       <div class="tarot-luckies">
-        <div class="tarot-lucky"><div class="tarot-lucky-label">LUCKY VIBE</div><div class="tarot-lucky-val">${getLuckyVibe(userMood)}</div></div>
-        <div class="tarot-lucky"><div class="tarot-lucky-label">LUCKY ACT</div><div class="tarot-lucky-val">${getLuckyAct(userTopic)}</div></div>
-        <div class="tarot-lucky"><div class="tarot-lucky-label">LUCKY TIME</div><div class="tarot-lucky-val">${getLuckyTime()}</div></div>
+        <div class="tarot-lucky"><div class="tarot-lucky-label">${I18N[LANG].t['tarot.luckyVibe']}</div><div class="tarot-lucky-val">${getLuckyVibe(userMood)}</div></div>
+        <div class="tarot-lucky"><div class="tarot-lucky-label">${I18N[LANG].t['tarot.luckyAct']}</div><div class="tarot-lucky-val">${getLuckyAct(userTopic)}</div></div>
+        <div class="tarot-lucky"><div class="tarot-lucky-label">${I18N[LANG].t['tarot.luckyTime']}</div><div class="tarot-lucky-val">${getLuckyTime()}</div></div>
       </div>
     `;
     document.getElementById('tarot-reset').style.display = '';
@@ -1073,12 +1050,12 @@ function pickTarot(el) {
 }
 
 function getLuckyVibe(mood) {
-  const map = { soft: 'Pastel + nhạc nhẹ', confused: 'Trắng + im lặng', hopeful: 'Đỏ + Taylor Swift', tired: 'Be + lo-fi' };
-  return map[mood] || 'Tùy hôm nay';
+  const lv = I18N[LANG].luckyVibe;
+  return lv[mood] || lv._default;
 }
 function getLuckyAct(topic) {
-  const map = { love: 'Gửi 1 tin nhắn', career: 'Ship 1 thứ nhỏ', self: 'Viết nhật ký 5 phút', open: 'Đi bộ 15 phút' };
-  return map[topic] || 'Sống vui';
+  const la = I18N[LANG].luckyAct;
+  return la[topic] || la._default;
 }
 function getLuckyTime() {
   const times = ['07:00', '11:11', '15:15', '18:00', '20:20', '23:11'];
@@ -1095,7 +1072,7 @@ function resetTarot() {
 }
 
 function shareTarot() {
-  alert('📸 Trong production sẽ tự download ảnh kết quả để share lên IG/TikTok story!');
+  alert(I18N[LANG].t['tarot.shareAlert']);
 }
 
 initTarotStars();
@@ -1115,6 +1092,178 @@ document.addEventListener('keydown', (e) => {
     }
   } else { konamiIdx = 0; }
 });
+
+// ============ I18N (vi / en / fr) ============
+const I18N = {
+  vi: {
+    t: {
+      'nav.quiz':'Quiz','nav.work':'Work','nav.games':'Games','nav.hire':'Hire','nav.play':'🔮 Coi bói',
+      'hero.title':'Dev <span class="pronounce">/đẹp/</span><br> nhưng mà <span class="wordplay">CUTE<span class="wordplay-tooltip">/kjuːt/ — "kiu-t" — adj. dễ thương + kiêu kỳ</span></span>.',
+      'hero.sub':'"Nhiều lúc tôi thấy mình cũng sầu, sầu bíu ti full."',
+      'split.weekdayLabel':'Weekday — Dev','split.weekdayTitle':'TypeScript, Cloudflare, café không đường.','split.weekdayDesc':'Building Lunchhub (SaaS) + DevDict (Q2 2026). HCMC-based.',
+      'split.weekendLabel':'Weekend — Cute','split.weekendTitle':'Outfit, lookbook, <span class="serif">và kiêu nhẹ.</span>','split.weekendDesc':'Run btcd lookbook — đẹp nhưng mà có tiêu chuẩn.',
+      'quiz.label':'— Interactive bio','quiz.question':'Bạn ghé qua đây vì...?','quiz.sub':'Mình có 2 bộ câu hỏi khác nhau. Chọn cái đúng với bạn.',
+      'quiz.hrTitle':'Mình là <span class="serif">nhà tuyển dụng</span>','quiz.hrDesc':'7 câu để xem mình có hợp team. Skill, culture fit, work style.','quiz.hrMeta':'SERIOUS · 7 QUESTIONS',
+      'quiz.gfTitle':'Mình là <span class="serif">crush tương lai</span>','quiz.gfDesc':'7 câu vô tri check vibe match. Cảnh báo: lầy lội cao.','quiz.gfMeta':'PLAYFUL · 7 QUESTIONS',
+      'quiz.back':'← đổi mode','quiz.hrBadge':'HR MODE','quiz.gfBadge':'CRUSH MODE','quiz.qNum':'CÂU',
+      'counter.years':'YEARS DEV','counter.commits':'COMMITS 2026','counter.subs':'SUBSCRIBERS','counter.coffee':'COFFEE CUPS',
+      'work.label':'— Selected work','work.title':'Things I\'ve <span class="serif">actually shipped.</span>','work.statusLive':'LIVE','work.statusDev':'IN DEV',
+      'work.lunchhubDesc':'Multi-tenant SaaS for office lunch ordering. Freemium model.','work.lookbookDesc':'Personal lookbook — what I wear, what I keep. A style journal on Cloudflare.','work.devdictDesc':'Vietnamese dev terminology with LLM. Q2 2026.',
+      'games.label':'— Take a break','games.title':'Chơi vài trò <span class="serif">trong khi đợi.</span>','games.sub':'Có cả coi bói cá nhân hoá cho bạn 🔮','games.tabTarot':'🔮 Coi bói hôm nay','games.tabBug':'🐛 Catch the bug','games.tabType':'⌨️ Type the code',
+      'tarot.intro':'Trả lời 2 câu nhỏ → vũ trụ sẽ chọn lời nhắn riêng cho bạn hôm nay. Phong cách: tích cực, validating, không có câu xấu.',
+      'tarot.step1':'— STEP 1 / 3 —','tarot.q1':'Hôm nay bạn đang...?','tarot.q1sub':'Chọn cái gần nhất, không có đúng sai',
+      'tarot.moodSoft':'Mềm yếu, cần ôm','tarot.moodConfused':'Mơ hồ, không rõ','tarot.moodHopeful':'Có hy vọng, năng lượng','tarot.moodTired':'Mệt, cần nghỉ',
+      'tarot.step2':'— STEP 2 / 3 —','tarot.q2':'Bạn đang cần lời nhắn về...?','tarot.q2sub':'Vũ trụ sẽ nói riêng về chủ đề này',
+      'tarot.topicLove':'Tình yêu / mối quan hệ','tarot.topicCareer':'Sự nghiệp / công việc','tarot.topicSelf':'Chính mình / nội tâm','tarot.topicOpen':'Mở — vũ trụ tự chọn',
+      'tarot.step3':'— STEP 3 / 3 —','tarot.q3':'Hít một hơi sâu.<br>Chọn 1 lá bài.','tarot.again':'🔄 Bói lại','tarot.save':'📸 Lưu ảnh',
+      'tarot.affirmLabel':'— AFFIRMATION HÔM NAY —','tarot.luckyVibe':'LUCKY VIBE','tarot.luckyAct':'LUCKY ACT','tarot.luckyTime':'LUCKY TIME',
+      'tarot.shareAlert':'📸 Trong production sẽ tự download ảnh kết quả để share lên IG/TikTok story!',
+      'bug.start':'Bấm START để bắt bug!','bug.hint':'Rê chuột qua bug để chém — như chém trái cây 🗡️','bug.startBtn':'▶ START','bug.newHigh':'🏆 NEW HIGH SCORE!','bug.playAgain':'Bấm START chơi lại',
+      'type.instr':'Gõ đoạn code này càng nhanh càng tốt.','type.placeholder':'Bắt đầu gõ ở đây...','type.newBtn':'🔄 Snippet mới',
+      'now.label':'— Right now','now.title':'What I\'m <span class="serif">building.</span>','now.active':'Active · 2h ago','now.text':'Mình đang build <span class="serif">DevDict</span> — Vietnamese dev terminology với LLM-powered explanations.','now.progress':'67% — đang code search + AI','now.launch':'Launch Q2 2026',
+      'gh.label':'— Proof of work','gh.title':'GitHub doesn\'t <span class="serif">lie.</span>','gh.commits':'<strong>847</strong> commits năm nay','gh.streak':'🔥 Streak: <strong>34 ngày</strong>',
+      'tools.label':'— Free tools (soon)','tools.title':'Mini tools mình <span class="serif">đang build.</span>','tools.t1name':'Tarot Dev — bản full','tools.t1desc':'Standalone version, có 22 lá, share link kết quả','tools.t2name':'btcd lookbook generator','tools.t2desc':'Upload outfit → AI viết caption vô tri','tools.t3name':'Lunch decider','tools.t3desc':'Hỏi 3 câu → rec quán trưa quanh chỗ bạn','tools.t4name':'Thư gửi mình 1 năm sau','tools.t4desc':'Auto gửi đúng ngày này năm sau',
+      'notes.label':'— Notes to self','notes.title':'Mấy điều mình <span class="serif">tự nhắc.</span>',
+      'notes.n1':'"Paris by night cũng không bằng you by my side."<div class="note-date">VÔ TRI #01</div>','notes.n2':'"Nhìn lên không bằng ai, nhìn xuống thấy mình."<div class="note-date">VÔ TRI #02</div>','notes.n3':'"Giải quyết được thì không gì phải lo, không giải quyết được thì lo làm gì."<div class="note-date">VÔ TRI #03</div>','notes.n4':'"Việc gì người ta làm được, chắc gì mình làm được. Việc gì người ta làm được thì để người ta làm."<div class="note-date">VÔ TRI #04</div>',
+      'vibe.label':'— Currently','vibe.title':'Reading & <span class="serif">listening.</span>','vibe.reading':'Đang đọc','vibe.listening':'Đang nghe',
+      'hire.label':'— Work with me','hire.title':'Hire me <span class="serif">for these.</span>','hire.c1tag':'CONTENT COLLAB','hire.c1name':'Brand collab IG/TikTok','hire.c1price':'Liên hệ','hire.c1desc':'1 reel review. Audience dev + lifestyle.','hire.c2tag':'⭐ POPULAR','hire.c2name':'Code 1 landing page','hire.c2price':'từ 3M','hire.c2desc':'Design + code Next.js + deploy. Có quiz + tarot như mình.','hire.c3tag':'1-1 SESSION','hire.c3name':'Coffee chat 60\'','hire.c3price':'500k','hire.c3desc':'Career advice cho dev. Chat về Next.js, AI.',
+      'nl.title':'Email <span class="serif">vô tri có ích</span>','nl.desc':'Mỗi chủ nhật mình gửi 1 email: 1 chuyện đời lầy + 1 bài học dev. 3 phút, không spam.','nl.placeholder':'your@email.com','nl.btn':'Đăng ký','nl.meta':'+ 1,247 người đã đăng ký · unsubscribe bất cứ lúc nào','nl.alert':'Cảm ơn! 💌',
+      'feed.label':'— Live feed','feed.title':'Đang có gì <span class="serif">xảy ra.</span>','feed.t1':'Có người vừa coi bói được lá "The Soft Bloom" 🌸','feed.time1':'2 phút trước','feed.t2':'Match 99% ở Crush Mode 💕','feed.time2':'14 phút trước','feed.t3':'28 người coi bói trong 24h qua 🔮','feed.time3':'1 giờ trước','feed.t4':'Newsletter có thêm 8 subscriber','feed.time4':'2 giờ trước','feed.t5':'Ai đó vừa bắt 47 con bug 🐛','feed.time5':'3 giờ trước',
+      'footer.quote':'"Dev là đẹp. Cute là kiêu. Cả hai đều không thể thiếu."','footer.copy':'© 2026 btcd.dev · Built with caffeine, Next.js & lipstick','footer.konami':'↑↑↓↓←→←→ to unlock secret 🤫',
+      'egg.title':'🎉 You found the secret!','egg.desc':'Email "konami" tới btcdan789@gmail.com để nhận coffee chat 50% off'
+    },
+    statuses:['Online. Đang ship code hoặc ship outfit.','Đang fix bug. Hoặc đang fix outfit.','Caffeine: 200%. Productivity: ¯\\_(ツ)_/¯','Status: sầu bíu ti full.','Tôi không bị burnout, tôi chỉ rất phong cách.'],
+    hrQuestions:[{q:'Team của bạn dùng tech stack gì?',options:[{emoji:'⚛️',text:'React/Next.js + Node',score:10},{emoji:'🔥',text:'Vue/Nuxt',score:9},{emoji:'🌐',text:'.NET / C# backend',score:8},{emoji:'🤔',text:'Stack khác',score:6}]},{q:'Phong cách làm việc?',options:[{emoji:'🎯',text:'Async-first',score:10},{emoji:'🤝',text:'Hybrid',score:9},{emoji:'📞',text:'Call nhiều',score:5},{emoji:'🏢',text:'Onsite',score:4}]},{q:'Role này là...',options:[{emoji:'💻',text:'Frontend / Fullstack với UX focus',score:10},{emoji:'🤖',text:'AI / Prompt Engineering',score:10},{emoji:'⚙️',text:'Backend / DevOps',score:7},{emoji:'📊',text:'Data / ML',score:5}]},{q:'Cần onsite?',options:[{emoji:'🌍',text:'Fully remote',score:10},{emoji:'✈️',text:'Remote-first',score:9},{emoji:'🏙️',text:'Hybrid (HCMC)',score:8},{emoji:'🏢',text:'5 ngày/tuần',score:3}]},{q:'Văn hoá team?',options:[{emoji:'🚀',text:'Move fast, ship daily',score:10},{emoji:'🎨',text:'Craft & quality',score:10},{emoji:'📈',text:'OKR-heavy',score:7},{emoji:'👔',text:'Process-heavy',score:4}]},{q:'Ngoài code đóng góp?',options:[{emoji:'🎨',text:'Design + UX',score:10},{emoji:'📝',text:'Content',score:9},{emoji:'🎤',text:'Speaking',score:8},{emoji:'🧪',text:'Chỉ code',score:6}]},{q:'Quan trọng nhất ở candidate?',options:[{emoji:'🧠',text:'Tư duy sản phẩm',score:10},{emoji:'💎',text:'Craftsmanship',score:10},{emoji:'⚡',text:'Tốc độ ship',score:8},{emoji:'📜',text:'Bằng cấp',score:4}]}],
+    gfQuestions:[{q:'Gặp lần đầu rủ đi...?',options:[{emoji:'☕',text:'Cafe yên tĩnh',score:10},{emoji:'🍜',text:'Quán mì ngon',score:9},{emoji:'🎬',text:'Xem phim',score:6},{emoji:'🍻',text:'Bar đông',score:5}]},{q:'11h đêm "không ngủ được"?',options:[{emoji:'🌙',text:'Gọi voice call',score:10},{emoji:'💬',text:'Nhắn đến khi mình ngủ',score:9},{emoji:'🎵',text:'Gửi 1 bài nhạc',score:8},{emoji:'😴',text:'Mai trả lời',score:4}]},{q:'Mình diện outfit lố?',options:[{emoji:'😍',text:'Khen thật lòng',score:10},{emoji:'📸',text:'Chụp ảnh cho mình',score:10},{emoji:'🤨',text:'"Em mặc gì kỳ vậy?"',score:2},{emoji:'🫣',text:'Đi cách 2m',score:3}]},{q:'Mình code đến 2h sáng?',options:[{emoji:'🍵',text:'Pha trà ngồi cạnh',score:10},{emoji:'😘',text:'Hôn trán',score:10},{emoji:'📺',text:'Ngủ trước',score:7},{emoji:'😤',text:'Giận',score:4}]},{q:'Love language?',options:[{emoji:'🎁',text:'Gifts',score:10},{emoji:'🫂',text:'Touch',score:10},{emoji:'💬',text:'Words',score:9},{emoji:'🤝',text:'Acts',score:9}]},{q:'Mình kể vô tri 15 phút?',options:[{emoji:'🤣',text:'Cười sặc, hỏi thêm',score:10},{emoji:'👂',text:'Nghe chăm chú',score:9},{emoji:'😐',text:'"Ờ" đổi chủ đề',score:3},{emoji:'📱',text:'Lướt phone',score:2}]},{q:'Tương lai?',options:[{emoji:'🏡',text:'Nhà nhỏ, mèo',score:10},{emoji:'✈️',text:'Freelance tự do',score:10},{emoji:'🤷',text:'Ngày nào hay ngày đó',score:5},{emoji:'💰',text:'Tiền nhiều',score:4}]}],
+    hrResults:[{tag:'STRONG MATCH',title:'Cú lừa hoàn hảo',desc:'Match cao.',cta1:'Email mình',cta2:'CV'},{tag:'GOOD FIT',title:'Nói chuyện được',desc:'Đáng gặp cafe.',cta1:'Gửi JD',cta2:'CV'},{tag:'MAYBE',title:'Cần bàn thêm',desc:'Cho thêm info.',cta1:'Liên hệ',cta2:'Lại'},{tag:'NOT THIS TIME',title:'Không lần này',desc:'Stack không match.',cta1:'OK',cta2:'Lại'}],
+    gfResults:[{tag:'SOULMATE',title:'Định mệnh',desc:'Nhắn IG.',vibe:'Endgame',cta1:'Nhắn IG',cta2:'Lại'},{tag:'CRUSHABLE',title:'Crush được',desc:'Cafe?',vibe:'Crushable',cta1:'Rủ cafe',cta2:'Lại'},{tag:'FRIENDZONE',title:'Làm bạn hợp hơn',desc:'Bạn 10/10.',vibe:'Friends',cta1:'Kết bạn',cta2:'Lại'},{tag:'OOF',title:'Không hợp',desc:'Khác nhau quá.',vibe:'Pass',cta1:'OK',cta2:'Lại'}],
+    tarotCards:[{roman:'I',emoji:'🌸',name:'The Soft Bloom',subtitle:'Lá của tự thương'},{roman:'II',emoji:'🦋',name:'The Becoming',subtitle:'Lá của thay đổi'},{roman:'III',emoji:'✨',name:'The Glow',subtitle:'Lá của ánh sáng'},{roman:'IV',emoji:'🌙',name:'The Inner Voice',subtitle:'Lá của trực giác'},{roman:'V',emoji:'💖',name:'The Heart',subtitle:'Lá của tình thương'},{roman:'VI',emoji:'🎯',name:'The Clarity',subtitle:'Lá của định hướng'},{roman:'VII',emoji:'🌿',name:'The Pause',subtitle:'Lá của nghỉ ngơi'},{roman:'VIII',emoji:'🔥',name:'The Spark',subtitle:'Lá của hành động'},{roman:'IX',emoji:'🌈',name:'The After Rain',subtitle:'Lá của hồi phục'},{roman:'X',emoji:'👑',name:'The Sovereign',subtitle:'Lá của tự chủ'}],
+    prophecies:{soft_love:{p:'Trái tim mềm không phải yếu đuối, mà là dấu hiệu của một người biết yêu sâu. Người đáng có bạn sẽ trân trọng cả phần dễ tổn thương đó.',a:'Mình xứng đáng được yêu cả khi mình mệt nhất.'},soft_career:{p:'Hôm nay bạn không cần phải làm thật to. Một việc nhỏ làm trọn vẹn cũng đủ tỏa sáng. Chậm không phải là thua.',a:'Tiến bộ của mình không cần ai chấm điểm.'},soft_self:{p:'Bạn đang đối xử khắt khe với chính mình hơn là với người khác. Hãy nói chuyện với bản thân như nói với một người bạn thân đang buồn.',a:'Mình được phép nghỉ. Mình được phép sai.'},soft_open:{p:'Cảm xúc bạn đang có là hợp lý. Không cần fix, không cần giải thích. Cho phép mình mềm hôm nay — đó cũng là một dạng mạnh mẽ.',a:'Mình ổn ngay cả khi mình không ổn.'},confused_love:{p:'Không biết là ai đó có yêu mình thật không? Câu trả lời nằm ở cảm giác của bạn khi ở cạnh họ — bạn có được là chính mình không?',a:'Mình không cần biết hết câu trả lời ngay hôm nay.'},confused_career:{p:'Bạn đang đứng giữa nhiều lựa chọn. Lá này nói: lựa chọn nào khiến bạn THỞ NHẸ HƠN khi nghĩ tới — chọn cái đó. Cơ thể biết trước trí óc.',a:'Mỗi bước đi đều dẫn mình đến đúng chỗ.'},confused_self:{p:'Bạn không phải đang lạc — bạn đang ở trong một transition. Lạc đường là khi đứng yên. Bạn vẫn đang đi, nên bạn vẫn đang đúng hướng.',a:'Mình tin vào hành trình ngay cả khi chưa thấy đích.'},confused_open:{p:'Khi mọi thứ mờ mịt, hãy hỏi: "3 năm tới mình muốn cảm thấy thế nào?" Câu trả lời cho câu đó sẽ chỉ đường cho hôm nay.',a:'Sự mơ hồ là không gian để điều mới được sinh ra.'},hopeful_love:{p:'Năng lượng bạn đang phát ra hôm nay sẽ thu hút đúng người. Đừng kìm lại. Cứ rạng rỡ. Người dành cho bạn sẽ nhận ra.',a:'Mình xứng đáng có người yêu mình như mình yêu họ.'},hopeful_career:{p:'Đây là cửa sổ vàng. Ý tưởng bạn đang ấp ủ — START đi. Lá này nói: "Done is better than perfect". Hôm nay là ngày của bạn.',a:'Mình tin vào ý tưởng của mình hơn là sợ hãi của mình.'},hopeful_self:{p:'Bạn đang trên đà glow up. Người khác chưa thấy nhưng vũ trụ thấy. 3 tháng tới sẽ có khoảnh khắc bạn nhìn lại và biết ơn quyết định hôm nay.',a:'Mình đang trở thành phiên bản mình tự hào.'},hopeful_open:{p:'Năng lượng bạn có hôm nay là quà. Dùng nó để bắt đầu cái bạn đã hoãn lâu rồi. Một câu nhắn, một dòng code, một bước chân.',a:'Hôm nay là một ngày tốt để dám.'},tired_love:{p:'Bạn không cần phải "always available" để được yêu. Người yêu bạn thật sẽ hiểu khi bạn cần không gian. Hãy cho phép mình rút lui.',a:'Mình được phép nghỉ trong tình yêu.'},tired_career:{p:'Burnout không phải lỗi của bạn — nó là thông điệp. Cơ thể đang xin nghỉ. Lá này yêu cầu bạn: tắt máy đi, mai làm tiếp. Productivity sẽ về.',a:'Nghỉ ngơi là một dạng tiến bộ.'},tired_self:{p:'Bạn không bị "kém đi", bạn chỉ đang cần sạc. Cái cây cần mùa đông để mùa xuân nở. Hãy nghỉ mà không tội lỗi. Bạn đáng có điều đó.',a:'Mình đủ ngay cả khi mình không làm gì.'},tired_open:{p:'Cơ thể đang nói chuyện với bạn. Lắng nghe nó. Ngủ thêm 1 tiếng, uống thêm 1 ly nước, đi bộ 10 phút. Đó là tất cả việc bạn cần làm hôm nay.',a:'Mình ưu tiên bản thân không cần xin lỗi.'}},
+    moodLabels:{soft:'🌸 Mềm yếu',confused:'🌀 Mơ hồ',hopeful:'✨ Hy vọng',tired:'🌿 Mệt mỏi'},
+    topicLabels:{love:'💖 Tình yêu',career:'🎯 Sự nghiệp',self:'🪞 Chính mình',open:'🎲 Mở'},
+    luckyVibe:{soft:'Pastel + nhạc nhẹ',confused:'Trắng + im lặng',hopeful:'Đỏ + Taylor Swift',tired:'Be + lo-fi',_default:'Tùy hôm nay'},
+    luckyAct:{love:'Gửi 1 tin nhắn',career:'Ship 1 thứ nhỏ',self:'Viết nhật ký 5 phút',open:'Đi bộ 15 phút',_default:'Sống vui'}
+  },
+  en: {
+    t: {
+      'nav.quiz':'Quiz','nav.work':'Work','nav.games':'Games','nav.hire':'Hire','nav.play':'🔮 Read my fortune',
+      'hero.title':'Dev <span class="pronounce">/dev/</span><br> but make it <span class="wordplay">CUTE<span class="wordplay-tooltip">/kjuːt/ — adj. adorable + a little extra</span></span>.',
+      'hero.sub':'"Some days I\'m down bad — fully, deeply, dramatically bad."',
+      'split.weekdayLabel':'Weekday — Dev','split.weekdayTitle':'TypeScript, Cloudflare, coffee no sugar.','split.weekdayDesc':'Building Lunchhub (SaaS) + DevDict (Q2 2026). HCMC-based.',
+      'split.weekendLabel':'Weekend — Cute','split.weekendTitle':'Outfits, lookbook, <span class="serif">and a little sass.</span>','split.weekendDesc':'Running btcd lookbook — pretty, but with standards.',
+      'quiz.label':'— Interactive bio','quiz.question':'What brings you here...?','quiz.sub':'I\'ve got 2 different question sets. Pick the one that fits you.',
+      'quiz.hrTitle':'I\'m a <span class="serif">recruiter</span>','quiz.hrDesc':'7 questions to see if I fit your team. Skills, culture fit, work style.','quiz.hrMeta':'SERIOUS · 7 QUESTIONS',
+      'quiz.gfTitle':'I\'m a <span class="serif">future crush</span>','quiz.gfDesc':'7 silly questions to check the vibe match. Warning: high chaos.','quiz.gfMeta':'PLAYFUL · 7 QUESTIONS',
+      'quiz.back':'← change mode','quiz.hrBadge':'HR MODE','quiz.gfBadge':'CRUSH MODE','quiz.qNum':'QUESTION',
+      'counter.years':'YEARS DEV','counter.commits':'COMMITS 2026','counter.subs':'SUBSCRIBERS','counter.coffee':'COFFEE CUPS',
+      'work.label':'— Selected work','work.title':'Things I\'ve <span class="serif">actually shipped.</span>','work.statusLive':'LIVE','work.statusDev':'IN DEV',
+      'work.lunchhubDesc':'Multi-tenant SaaS for office lunch ordering. Freemium model.','work.lookbookDesc':'Personal lookbook — what I wear, what I keep. A style journal on Cloudflare.','work.devdictDesc':'Vietnamese dev terminology with LLM. Q2 2026.',
+      'games.label':'— Take a break','games.title':'Play something <span class="serif">while you wait.</span>','games.sub':'There\'s even a personalised fortune reading for you 🔮','games.tabTarot':'🔮 Today\'s reading','games.tabBug':'🐛 Catch the bug','games.tabType':'⌨️ Type the code',
+      'tarot.intro':'Answer 2 little questions → the universe picks a message just for you today. Style: positive, validating, no bad cards.',
+      'tarot.step1':'— STEP 1 / 3 —','tarot.q1':'Today you\'re feeling...?','tarot.q1sub':'Pick the closest — no right or wrong',
+      'tarot.moodSoft':'Soft, need a hug','tarot.moodConfused':'Foggy, unsure','tarot.moodHopeful':'Hopeful, energised','tarot.moodTired':'Tired, need rest',
+      'tarot.step2':'— STEP 2 / 3 —','tarot.q2':'You need a message about...?','tarot.q2sub':'The universe will speak to this topic',
+      'tarot.topicLove':'Love / relationships','tarot.topicCareer':'Career / work','tarot.topicSelf':'Yourself / inner world','tarot.topicOpen':'Open — let the universe pick',
+      'tarot.step3':'— STEP 3 / 3 —','tarot.q3':'Take a deep breath.<br>Pick a card.','tarot.again':'🔄 Read again','tarot.save':'📸 Save image',
+      'tarot.affirmLabel':'— TODAY\'S AFFIRMATION —','tarot.luckyVibe':'LUCKY VIBE','tarot.luckyAct':'LUCKY ACT','tarot.luckyTime':'LUCKY TIME',
+      'tarot.shareAlert':'📸 In production this auto-downloads your result image to share on your IG/TikTok story!',
+      'bug.start':'Press START to catch bugs!','bug.hint':'Hover over a bug to slash it — like slicing fruit 🗡️','bug.startBtn':'▶ START','bug.newHigh':'🏆 NEW HIGH SCORE!','bug.playAgain':'Press START to play again',
+      'type.instr':'Type this snippet as fast as you can.','type.placeholder':'Start typing here...','type.newBtn':'🔄 New snippet',
+      'now.label':'— Right now','now.title':'What I\'m <span class="serif">building.</span>','now.active':'Active · 2h ago','now.text':'I\'m building <span class="serif">DevDict</span> — Vietnamese dev terminology with LLM-powered explanations.','now.progress':'67% — building search + AI','now.launch':'Launch Q2 2026',
+      'gh.label':'— Proof of work','gh.title':'GitHub doesn\'t <span class="serif">lie.</span>','gh.commits':'<strong>847</strong> commits this year','gh.streak':'🔥 Streak: <strong>34 days</strong>',
+      'tools.label':'— Free tools (soon)','tools.title':'Mini tools I\'m <span class="serif">building.</span>','tools.t1name':'Tarot Dev — full version','tools.t1desc':'Standalone version, 22 cards, shareable result link','tools.t2name':'btcd lookbook generator','tools.t2desc':'Upload an outfit → AI writes a silly caption','tools.t3name':'Lunch decider','tools.t3desc':'Answer 3 questions → get lunch spots near you','tools.t4name':'Letter to yourself, 1 year later','tools.t4desc':'Auto-sent on this exact day next year',
+      'notes.label':'— Notes to self','notes.title':'Things I <span class="serif">remind myself.</span>',
+      'notes.n1':'"No city lights beat you by my side."<div class="note-date">RANDOM THOUGHT #01</div>','notes.n2':'"Looking up you fall short of others; looking down you find yourself."<div class="note-date">RANDOM THOUGHT #02</div>','notes.n3':'"If it can be solved, no need to worry; if it can\'t, what\'s the worry for?"<div class="note-date">RANDOM THOUGHT #03</div>','notes.n4':'"Just because someone can do it doesn\'t mean I can. And if they can — let them do it."<div class="note-date">RANDOM THOUGHT #04</div>',
+      'vibe.label':'— Currently','vibe.title':'Reading & <span class="serif">listening.</span>','vibe.reading':'Reading','vibe.listening':'Listening',
+      'hire.label':'— Work with me','hire.title':'Hire me <span class="serif">for these.</span>','hire.c1tag':'CONTENT COLLAB','hire.c1name':'Brand collab IG/TikTok','hire.c1price':'Contact','hire.c1desc':'1 reel review. Dev + lifestyle audience.','hire.c2tag':'⭐ POPULAR','hire.c2name':'Code a landing page','hire.c2price':'from 3M','hire.c2desc':'Design + code Next.js + deploy. With quiz + tarot like mine.','hire.c3tag':'1-1 SESSION','hire.c3name':'Coffee chat 60\'','hire.c3price':'500k','hire.c3desc':'Career advice for devs. Chat about Next.js, AI.',
+      'nl.title':'Email <span class="serif">that\'s silly but useful</span>','nl.desc':'Every Sunday I send 1 email: 1 messy life story + 1 dev lesson. 3 minutes, no spam.','nl.placeholder':'your@email.com','nl.btn':'Subscribe','nl.meta':'+ 1,247 subscribers · unsubscribe anytime','nl.alert':'Thank you! 💌',
+      'feed.label':'— Live feed','feed.title':'What\'s <span class="serif">happening.</span>','feed.t1':'Someone just drew "The Soft Bloom" 🌸','feed.time1':'2 min ago','feed.t2':'99% match in Crush Mode 💕','feed.time2':'14 min ago','feed.t3':'28 people read their fortune in the last 24h 🔮','feed.time3':'1 hour ago','feed.t4':'Newsletter gained 8 subscribers','feed.time4':'2 hours ago','feed.t5':'Someone caught 47 bugs 🐛','feed.time5':'3 hours ago',
+      'footer.quote':'"Dev is beauty. Cute is pride. Can\'t go without either."','footer.copy':'© 2026 btcd.dev · Built with caffeine, Next.js & lipstick','footer.konami':'↑↑↓↓←→←→ to unlock secret 🤫',
+      'egg.title':'🎉 You found the secret!','egg.desc':'Email "konami" to btcdan789@gmail.com for 50% off a coffee chat'
+    },
+    statuses:['Online. Shipping code or shipping outfits.','Fixing a bug. Or fixing an outfit.','Caffeine: 200%. Productivity: ¯\\_(ツ)_/¯','Status: down bad, fully.','I\'m not burnt out, I\'m just very stylish.'],
+    hrQuestions:[{q:'What tech stack does your team use?',options:[{emoji:'⚛️',text:'React/Next.js + Node',score:10},{emoji:'🔥',text:'Vue/Nuxt',score:9},{emoji:'🌐',text:'.NET / C# backend',score:8},{emoji:'🤔',text:'A different stack',score:6}]},{q:'Work style?',options:[{emoji:'🎯',text:'Async-first',score:10},{emoji:'🤝',text:'Hybrid',score:9},{emoji:'📞',text:'Lots of calls',score:5},{emoji:'🏢',text:'Onsite',score:4}]},{q:'This role is...',options:[{emoji:'💻',text:'Frontend / Fullstack with UX focus',score:10},{emoji:'🤖',text:'AI / Prompt Engineering',score:10},{emoji:'⚙️',text:'Backend / DevOps',score:7},{emoji:'📊',text:'Data / ML',score:5}]},{q:'Onsite required?',options:[{emoji:'🌍',text:'Fully remote',score:10},{emoji:'✈️',text:'Remote-first',score:9},{emoji:'🏙️',text:'Hybrid (HCMC)',score:8},{emoji:'🏢',text:'5 days/week',score:3}]},{q:'Team culture?',options:[{emoji:'🚀',text:'Move fast, ship daily',score:10},{emoji:'🎨',text:'Craft & quality',score:10},{emoji:'📈',text:'OKR-heavy',score:7},{emoji:'👔',text:'Process-heavy',score:4}]},{q:'Beyond code, you contribute?',options:[{emoji:'🎨',text:'Design + UX',score:10},{emoji:'📝',text:'Content',score:9},{emoji:'🎤',text:'Speaking',score:8},{emoji:'🧪',text:'Just code',score:6}]},{q:'Most important in a candidate?',options:[{emoji:'🧠',text:'Product thinking',score:10},{emoji:'💎',text:'Craftsmanship',score:10},{emoji:'⚡',text:'Shipping speed',score:8},{emoji:'📜',text:'Degrees',score:4}]}],
+    gfQuestions:[{q:'First date, you\'d go...?',options:[{emoji:'☕',text:'Quiet cafe',score:10},{emoji:'🍜',text:'Good noodle spot',score:9},{emoji:'🎬',text:'Movie',score:6},{emoji:'🍻',text:'Crowded bar',score:5}]},{q:'11pm "can\'t sleep"?',options:[{emoji:'🌙',text:'Call me on voice',score:10},{emoji:'💬',text:'Text till I fall asleep',score:9},{emoji:'🎵',text:'Send me a song',score:8},{emoji:'😴',text:'Reply tomorrow',score:4}]},{q:'I wear an over-the-top outfit?',options:[{emoji:'😍',text:'Genuine compliment',score:10},{emoji:'📸',text:'Take photos for me',score:10},{emoji:'🤨',text:'"Why are you dressed like that?"',score:2},{emoji:'🫣',text:'Walk 2m away',score:3}]},{q:'I code till 2am?',options:[{emoji:'🍵',text:'Make tea, sit beside me',score:10},{emoji:'😘',text:'Kiss on the forehead',score:10},{emoji:'📺',text:'Sleep first',score:7},{emoji:'😤',text:'Get annoyed',score:4}]},{q:'Love language?',options:[{emoji:'🎁',text:'Gifts',score:10},{emoji:'🫂',text:'Touch',score:10},{emoji:'💬',text:'Words',score:9},{emoji:'🤝',text:'Acts',score:9}]},{q:'I ramble nonsense for 15 min?',options:[{emoji:'🤣',text:'Laugh, ask for more',score:10},{emoji:'👂',text:'Listen closely',score:9},{emoji:'😐',text:'"Mhm" then change topic',score:3},{emoji:'📱',text:'Scroll phone',score:2}]},{q:'The future?',options:[{emoji:'🏡',text:'Small house, a cat',score:10},{emoji:'✈️',text:'Free freelance life',score:10},{emoji:'🤷',text:'Day by day',score:5},{emoji:'💰',text:'Lots of money',score:4}]}],
+    hrResults:[{tag:'STRONG MATCH',title:'A perfect plot twist',desc:'High match.',cta1:'Email me',cta2:'CV'},{tag:'GOOD FIT',title:'Worth talking',desc:'Worth a coffee.',cta1:'Send JD',cta2:'CV'},{tag:'MAYBE',title:'Let\'s discuss more',desc:'Give me more info.',cta1:'Contact',cta2:'Retry'},{tag:'NOT THIS TIME',title:'Not this time',desc:'Stack doesn\'t match.',cta1:'OK',cta2:'Retry'}],
+    gfResults:[{tag:'SOULMATE',title:'Destiny',desc:'DM me on IG.',vibe:'Endgame',cta1:'DM on IG',cta2:'Retry'},{tag:'CRUSHABLE',title:'Crush material',desc:'Coffee?',vibe:'Crushable',cta1:'Grab coffee',cta2:'Retry'},{tag:'FRIENDZONE',title:'Better as friends',desc:'A 10/10 friend.',vibe:'Friends',cta1:'Be friends',cta2:'Retry'},{tag:'OOF',title:'Not a match',desc:'Too different.',vibe:'Pass',cta1:'OK',cta2:'Retry'}],
+    tarotCards:[{roman:'I',emoji:'🌸',name:'The Soft Bloom',subtitle:'Card of self-love'},{roman:'II',emoji:'🦋',name:'The Becoming',subtitle:'Card of becoming'},{roman:'III',emoji:'✨',name:'The Glow',subtitle:'Card of light'},{roman:'IV',emoji:'🌙',name:'The Inner Voice',subtitle:'Card of intuition'},{roman:'V',emoji:'💖',name:'The Heart',subtitle:'Card of love'},{roman:'VI',emoji:'🎯',name:'The Clarity',subtitle:'Card of clarity'},{roman:'VII',emoji:'🌿',name:'The Pause',subtitle:'Card of rest'},{roman:'VIII',emoji:'🔥',name:'The Spark',subtitle:'Card of action'},{roman:'IX',emoji:'🌈',name:'The After Rain',subtitle:'Card of recovery'},{roman:'X',emoji:'👑',name:'The Sovereign',subtitle:'Card of sovereignty'}],
+    prophecies:{soft_love:{p:'A soft heart isn\'t weakness — it\'s the mark of someone who loves deeply. The right person will treasure even the tender, fragile parts.',a:'I deserve love even at my most tired.'},soft_career:{p:'Today you don\'t have to do anything huge. One small thing done well is enough to shine. Slow isn\'t losing.',a:'My progress needs no one\'s grade.'},soft_self:{p:'You\'re harder on yourself than on anyone else. Talk to yourself like you\'d talk to a dear friend who\'s sad.',a:'I\'m allowed to rest. I\'m allowed to get it wrong.'},soft_open:{p:'What you feel is valid. No need to fix it, no need to explain. Let yourself be soft today — that\'s a kind of strength too.',a:'I\'m okay even when I\'m not okay.'},confused_love:{p:'Not sure if someone truly loves you? The answer is in how you feel beside them — do you get to be yourself?',a:'I don\'t need all the answers today.'},confused_career:{p:'You\'re caught between options. This card says: whichever one lets you BREATHE EASIER when you think of it — choose that. The body knows before the mind.',a:'Every step leads me to the right place.'},confused_self:{p:'You\'re not lost — you\'re in transition. Being lost is standing still. You\'re still moving, so you\'re still on track.',a:'I trust the journey even before I see the destination.'},confused_open:{p:'When everything\'s foggy, ask: "How do I want to feel 3 years from now?" The answer will light up today.',a:'Uncertainty is the space where new things are born.'},hopeful_love:{p:'The energy you\'re giving off today will draw the right person in. Don\'t hold back. Shine. The one for you will notice.',a:'I deserve someone who loves me the way I love them.'},hopeful_career:{p:'This is a golden window. That idea you\'ve been nursing — START it. This card says: "Done is better than perfect." Today is your day.',a:'I trust my ideas more than my fears.'},hopeful_self:{p:'You\'re on a glow-up streak. Others can\'t see it yet, but the universe can. In 3 months there\'ll be a moment you look back and thank today\'s decision.',a:'I\'m becoming a version of myself I\'m proud of.'},hopeful_open:{p:'The energy you have today is a gift. Use it to start the thing you\'ve been putting off. One message, one line of code, one step.',a:'Today is a good day to be brave.'},tired_love:{p:'You don\'t have to be "always available" to be loved. Someone who truly loves you understands when you need space. Let yourself retreat.',a:'I\'m allowed to rest, even in love.'},tired_career:{p:'Burnout isn\'t your fault — it\'s a message. Your body is asking for a break. This card asks you to: shut the laptop, continue tomorrow. Productivity will return.',a:'Rest is a form of progress.'},tired_self:{p:'You\'re not "getting worse," you just need to recharge. A tree needs winter to bloom in spring. Rest without guilt. You deserve it.',a:'I am enough even when I\'m doing nothing.'},tired_open:{p:'Your body is talking to you. Listen. One more hour of sleep, one more glass of water, a 10-minute walk. That\'s all you need to do today.',a:'I put myself first without apology.'}},
+    moodLabels:{soft:'🌸 Soft',confused:'🌀 Foggy',hopeful:'✨ Hopeful',tired:'🌿 Tired'},
+    topicLabels:{love:'💖 Love',career:'🎯 Career',self:'🪞 Yourself',open:'🎲 Open'},
+    luckyVibe:{soft:'Pastel + soft music',confused:'White + silence',hopeful:'Red + Taylor Swift',tired:'Beige + lo-fi',_default:'Depends on today'},
+    luckyAct:{love:'Send one message',career:'Ship one small thing',self:'Journal for 5 minutes',open:'Walk for 15 minutes',_default:'Live happy'}
+  },
+  fr: {
+    t: {
+      'nav.quiz':'Quiz','nav.work':'Projets','nav.games':'Jeux','nav.hire':'Collab','nav.play':'🔮 Tire les cartes',
+      'hero.title':'Dev <span class="pronounce">/dɛv/</span><br> mais en version <span class="wordplay">CUTE<span class="wordplay-tooltip">/kjuːt/ — adj. mignon·ne + un peu fière</span></span>.',
+      'hero.sub':'"Certains jours je suis à terre — complètement, dramatiquement à terre."',
+      'split.weekdayLabel':'Semaine — Dev','split.weekdayTitle':'TypeScript, Cloudflare, café sans sucre.','split.weekdayDesc':'Je construis Lunchhub (SaaS) + DevDict (T2 2026). Basée à HCMV.',
+      'split.weekendLabel':'Week-end — Cute','split.weekendTitle':'Outfits, lookbook, <span class="serif">et un peu de caractère.</span>','split.weekendDesc':'Je gère btcd lookbook — joli, mais avec des standards.',
+      'quiz.label':'— Bio interactive','quiz.question':'Qu\'est-ce qui t\'amène ici...?','quiz.sub':'J\'ai 2 séries de questions différentes. Choisis celle qui te correspond.',
+      'quiz.hrTitle':'Je suis <span class="serif">recruteur·se</span>','quiz.hrDesc':'7 questions pour voir si je colle à ton équipe. Skills, culture, façon de bosser.','quiz.hrMeta':'SÉRIEUX · 7 QUESTIONS',
+      'quiz.gfTitle':'Je suis ton <span class="serif">futur crush</span>','quiz.gfDesc':'7 questions absurdes pour tester le vibe. Attention : chaos élevé.','quiz.gfMeta':'LUDIQUE · 7 QUESTIONS',
+      'quiz.back':'← changer de mode','quiz.hrBadge':'MODE HR','quiz.gfBadge':'MODE CRUSH','quiz.qNum':'QUESTION',
+      'counter.years':'ANNÉES DEV','counter.commits':'COMMITS 2026','counter.subs':'ABONNÉS','counter.coffee':'TASSES DE CAFÉ',
+      'work.label':'— Projets choisis','work.title':'Ce que j\'ai <span class="serif">vraiment livré.</span>','work.statusLive':'LIVE','work.statusDev':'EN DEV',
+      'work.lunchhubDesc':'SaaS multi-tenant pour commander le déjeuner au bureau. Modèle freemium.','work.lookbookDesc':'Lookbook perso — ce que je porte, ce que je garde. Un journal de style sur Cloudflare.','work.devdictDesc':'Terminologie dev vietnamienne avec LLM. T2 2026.',
+      'games.label':'— Fais une pause','games.title':'Joue un peu <span class="serif">en attendant.</span>','games.sub':'Il y a même un tirage de cartes personnalisé pour toi 🔮','games.tabTarot':'🔮 Tirage du jour','games.tabBug':'🐛 Attrape le bug','games.tabType':'⌨️ Tape le code',
+      'tarot.intro':'Réponds à 2 petites questions → l\'univers choisit un message rien que pour toi aujourd\'hui. Style : positif, bienveillant, aucune mauvaise carte.',
+      'tarot.step1':'— ÉTAPE 1 / 3 —','tarot.q1':'Aujourd\'hui tu te sens...?','tarot.q1sub':'Choisis le plus proche — pas de bonne ou mauvaise réponse',
+      'tarot.moodSoft':'Fragile, besoin d\'un câlin','tarot.moodConfused':'Dans le flou, pas clair','tarot.moodHopeful':'Plein·e d\'espoir, d\'énergie','tarot.moodTired':'Fatigué·e, besoin de repos',
+      'tarot.step2':'— ÉTAPE 2 / 3 —','tarot.q2':'Tu as besoin d\'un message sur...?','tarot.q2sub':'L\'univers parlera de ce thème',
+      'tarot.topicLove':'Amour / relations','tarot.topicCareer':'Carrière / travail','tarot.topicSelf':'Toi-même / intérieur','tarot.topicOpen':'Ouvert — l\'univers choisit',
+      'tarot.step3':'— ÉTAPE 3 / 3 —','tarot.q3':'Respire un grand coup.<br>Choisis une carte.','tarot.again':'🔄 Retirer','tarot.save':'📸 Sauver l\'image',
+      'tarot.affirmLabel':'— AFFIRMATION DU JOUR —','tarot.luckyVibe':'VIBE CHANCEUSE','tarot.luckyAct':'ACTION CHANCEUSE','tarot.luckyTime':'HEURE CHANCEUSE',
+      'tarot.shareAlert':'📸 En production, ça télécharge automatiquement ton résultat à partager en story IG/TikTok !',
+      'bug.start':'Appuie sur START pour attraper les bugs !','bug.hint':'Survole un bug pour le trancher — comme couper des fruits 🗡️','bug.startBtn':'▶ START','bug.newHigh':'🏆 NOUVEAU RECORD !','bug.playAgain':'Appuie sur START pour rejouer',
+      'type.instr':'Tape ce snippet le plus vite possible.','type.placeholder':'Commence à taper ici...','type.newBtn':'🔄 Nouveau snippet',
+      'now.label':'— En ce moment','now.title':'Ce que je <span class="serif">construis.</span>','now.active':'Actif · il y a 2h','now.text':'Je construis <span class="serif">DevDict</span> — terminologie dev vietnamienne avec explications par LLM.','now.progress':'67% — recherche + IA en cours','now.launch':'Lancement T2 2026',
+      'gh.label':'— Preuve de travail','gh.title':'GitHub ne <span class="serif">ment pas.</span>','gh.commits':'<strong>847</strong> commits cette année','gh.streak':'🔥 Série : <strong>34 jours</strong>',
+      'tools.label':'— Outils gratuits (bientôt)','tools.title':'Mini outils que je <span class="serif">construis.</span>','tools.t1name':'Tarot Dev — version complète','tools.t1desc':'Version autonome, 22 cartes, lien de résultat partageable','tools.t2name':'Générateur btcd lookbook','tools.t2desc':'Upload un outfit → l\'IA écrit une légende absurde','tools.t3name':'Décideur de déjeuner','tools.t3desc':'Réponds à 3 questions → des spots de déjeuner près de toi','tools.t4name':'Lettre à toi-même, 1 an plus tard','tools.t4desc':'Envoyée automatiquement ce jour précis l\'an prochain',
+      'notes.label':'— Notes pour moi','notes.title':'Ce que je me <span class="serif">rappelle.</span>',
+      'notes.n1':'"Aucune lumière de ville ne vaut toi à mes côtés."<div class="note-date">PENSÉE RANDOM #01</div>','notes.n2':'"À regarder en haut tu n\'égales personne ; à regarder en bas tu te retrouves."<div class="note-date">PENSÉE RANDOM #02</div>','notes.n3':'"Si ça se règle, pas la peine de s\'inquiéter ; sinon, à quoi bon s\'inquiéter ?"<div class="note-date">PENSÉE RANDOM #03</div>','notes.n4':'"Ce que les autres réussissent, rien ne dit que je le réussirai. Et si eux y arrivent — laisse-les faire."<div class="note-date">PENSÉE RANDOM #04</div>',
+      'vibe.label':'— Actuellement','vibe.title':'Je lis & <span class="serif">j\'écoute.</span>','vibe.reading':'Je lis','vibe.listening':'J\'écoute',
+      'hire.label':'— Bosse avec moi','hire.title':'Engage-moi <span class="serif">pour ça.</span>','hire.c1tag':'COLLAB CONTENU','hire.c1name':'Collab marque IG/TikTok','hire.c1price':'Contact','hire.c1desc':'1 reel review. Audience dev + lifestyle.','hire.c2tag':'⭐ POPULAIRE','hire.c2name':'Coder une landing page','hire.c2price':'dès 3M','hire.c2desc':'Design + code Next.js + déploiement. Avec quiz + tarot comme le mien.','hire.c3tag':'SESSION 1-1','hire.c3name':'Coffee chat 60\'','hire.c3price':'500k','hire.c3desc':'Conseils carrière pour devs. On parle Next.js, IA.',
+      'nl.title':'Un email <span class="serif">absurde mais utile</span>','nl.desc':'Chaque dimanche j\'envoie 1 email : 1 histoire de vie déjantée + 1 leçon de dev. 3 minutes, sans spam.','nl.placeholder':'ton@email.com','nl.btn':'S\'abonner','nl.meta':'+ 1 247 abonnés · désabonnement à tout moment','nl.alert':'Merci ! 💌',
+      'feed.label':'— Flux en direct','feed.title':'Ce qui se <span class="serif">passe.</span>','feed.t1':'Quelqu\'un vient de tirer "The Soft Bloom" 🌸','feed.time1':'il y a 2 min','feed.t2':'Match à 99% en Mode Crush 💕','feed.time2':'il y a 14 min','feed.t3':'28 personnes ont tiré les cartes ces dernières 24h 🔮','feed.time3':'il y a 1 heure','feed.t4':'La newsletter a gagné 8 abonnés','feed.time4':'il y a 2 heures','feed.t5':'Quelqu\'un a attrapé 47 bugs 🐛','feed.time5':'il y a 3 heures',
+      'footer.quote':'"Le dev, c\'est beau. Le cute, c\'est la fierté. Impossible de choisir."','footer.copy':'© 2026 btcd.dev · Fait avec caféine, Next.js & rouge à lèvres','footer.konami':'↑↑↓↓←→←→ pour débloquer le secret 🤫',
+      'egg.title':'🎉 Tu as trouvé le secret !','egg.desc':'Envoie "konami" à btcdan789@gmail.com pour -50% sur un coffee chat'
+    },
+    statuses:['En ligne. Je ship du code ou des outfits.','Je fixe un bug. Ou un outfit.','Caféine : 200%. Productivité : ¯\\_(ツ)_/¯','Statut : complètement à terre.','Je ne suis pas en burnout, je suis juste très stylée.'],
+    hrQuestions:[{q:'Quelle stack utilise ton équipe ?',options:[{emoji:'⚛️',text:'React/Next.js + Node',score:10},{emoji:'🔥',text:'Vue/Nuxt',score:9},{emoji:'🌐',text:'.NET / C# backend',score:8},{emoji:'🤔',text:'Une autre stack',score:6}]},{q:'Façon de bosser ?',options:[{emoji:'🎯',text:'Async-first',score:10},{emoji:'🤝',text:'Hybride',score:9},{emoji:'📞',text:'Beaucoup d\'appels',score:5},{emoji:'🏢',text:'Sur site',score:4}]},{q:'Ce poste, c\'est...',options:[{emoji:'💻',text:'Frontend / Fullstack orienté UX',score:10},{emoji:'🤖',text:'IA / Prompt Engineering',score:10},{emoji:'⚙️',text:'Backend / DevOps',score:7},{emoji:'📊',text:'Data / ML',score:5}]},{q:'Présence sur site ?',options:[{emoji:'🌍',text:'100% remote',score:10},{emoji:'✈️',text:'Remote-first',score:9},{emoji:'🏙️',text:'Hybride (HCMV)',score:8},{emoji:'🏢',text:'5 jours/semaine',score:3}]},{q:'Culture d\'équipe ?',options:[{emoji:'🚀',text:'Avancer vite, ship chaque jour',score:10},{emoji:'🎨',text:'Craft & qualité',score:10},{emoji:'📈',text:'Beaucoup d\'OKR',score:7},{emoji:'👔',text:'Beaucoup de process',score:4}]},{q:'En dehors du code, tu apportes ?',options:[{emoji:'🎨',text:'Design + UX',score:10},{emoji:'📝',text:'Contenu',score:9},{emoji:'🎤',text:'Prise de parole',score:8},{emoji:'🧪',text:'Juste du code',score:6}]},{q:'Le plus important chez un·e candidat·e ?',options:[{emoji:'🧠',text:'Sens produit',score:10},{emoji:'💎',text:'Craftsmanship',score:10},{emoji:'⚡',text:'Vitesse de livraison',score:8},{emoji:'📜',text:'Les diplômes',score:4}]}],
+    gfQuestions:[{q:'Premier rendez-vous, on irait...?',options:[{emoji:'☕',text:'Café tranquille',score:10},{emoji:'🍜',text:'Bon resto de nouilles',score:9},{emoji:'🎬',text:'Au ciné',score:6},{emoji:'🍻',text:'Bar bondé',score:5}]},{q:'23h "je dors pas" ?',options:[{emoji:'🌙',text:'Appelle-moi en vocal',score:10},{emoji:'💬',text:'Écris-moi jusqu\'à ce que je dorme',score:9},{emoji:'🎵',text:'Envoie-moi une chanson',score:8},{emoji:'😴',text:'Réponds demain',score:4}]},{q:'Je porte un outfit too much ?',options:[{emoji:'😍',text:'Compliment sincère',score:10},{emoji:'📸',text:'Prends-moi en photo',score:10},{emoji:'🤨',text:'"Tu t\'es habillée comment là ?"',score:2},{emoji:'🫣',text:'Marche à 2m',score:3}]},{q:'Je code jusqu\'à 2h du mat ?',options:[{emoji:'🍵',text:'Fais du thé, assieds-toi à côté',score:10},{emoji:'😘',text:'Bisou sur le front',score:10},{emoji:'📺',text:'Dors d\'abord',score:7},{emoji:'😤',text:'Fais la tête',score:4}]},{q:'Love language ?',options:[{emoji:'🎁',text:'Cadeaux',score:10},{emoji:'🫂',text:'Toucher',score:10},{emoji:'💬',text:'Mots',score:9},{emoji:'🤝',text:'Gestes',score:9}]},{q:'Je raconte des bêtises 15 min ?',options:[{emoji:'🤣',text:'Rire aux éclats, en redemander',score:10},{emoji:'👂',text:'Écouter attentivement',score:9},{emoji:'😐',text:'"Mouais" et changer de sujet',score:3},{emoji:'📱',text:'Scroller le téléphone',score:2}]},{q:'Le futur ?',options:[{emoji:'🏡',text:'Petite maison, un chat',score:10},{emoji:'✈️',text:'Vie freelance libre',score:10},{emoji:'🤷',text:'Au jour le jour',score:5},{emoji:'💰',text:'Beaucoup d\'argent',score:4}]}],
+    hrResults:[{tag:'STRONG MATCH',title:'Le plot twist parfait',desc:'Match élevé.',cta1:'Écris-moi',cta2:'CV'},{tag:'GOOD FIT',title:'Ça vaut le coup',desc:'Mérite un café.',cta1:'Envoie le JD',cta2:'CV'},{tag:'PEUT-ÊTRE',title:'À en discuter',desc:'Donne-moi plus d\'infos.',cta1:'Contact',cta2:'Recommencer'},{tag:'PAS CETTE FOIS',title:'Pas cette fois',desc:'La stack ne colle pas.',cta1:'OK',cta2:'Recommencer'}],
+    gfResults:[{tag:'ÂME SŒUR',title:'Destin',desc:'Écris-moi sur IG.',vibe:'Endgame',cta1:'DM sur IG',cta2:'Recommencer'},{tag:'CRUSHABLE',title:'Crush potentiel',desc:'Un café ?',vibe:'Crushable',cta1:'Prendre un café',cta2:'Recommencer'},{tag:'FRIENDZONE',title:'Mieux en amis',desc:'Un·e ami·e 10/10.',vibe:'Amis',cta1:'Devenir amis',cta2:'Recommencer'},{tag:'OOF',title:'Pas compatible',desc:'Trop différents.',vibe:'Pass',cta1:'OK',cta2:'Recommencer'}],
+    tarotCards:[{roman:'I',emoji:'🌸',name:'The Soft Bloom',subtitle:'Carte de l\'amour de soi'},{roman:'II',emoji:'🦋',name:'The Becoming',subtitle:'Carte du devenir'},{roman:'III',emoji:'✨',name:'The Glow',subtitle:'Carte de la lumière'},{roman:'IV',emoji:'🌙',name:'The Inner Voice',subtitle:'Carte de l\'intuition'},{roman:'V',emoji:'💖',name:'The Heart',subtitle:'Carte de l\'amour'},{roman:'VI',emoji:'🎯',name:'The Clarity',subtitle:'Carte de la clarté'},{roman:'VII',emoji:'🌿',name:'The Pause',subtitle:'Carte du repos'},{roman:'VIII',emoji:'🔥',name:'The Spark',subtitle:'Carte de l\'action'},{roman:'IX',emoji:'🌈',name:'The After Rain',subtitle:'Carte de la guérison'},{roman:'X',emoji:'👑',name:'The Sovereign',subtitle:'Carte de la souveraineté'}],
+    prophecies:{soft_love:{p:'Un cœur tendre n\'est pas une faiblesse — c\'est le signe de quelqu\'un qui aime profondément. La bonne personne chérira même cette part fragile.',a:'Je mérite d\'être aimé·e même au plus fatigué·e.'},soft_career:{p:'Aujourd\'hui tu n\'as pas besoin de faire grand. Une petite chose bien faite suffit à briller. Lent ne veut pas dire perdant.',a:'Mes progrès n\'ont besoin de la note de personne.'},soft_self:{p:'Tu es plus dur·e avec toi-même qu\'avec les autres. Parle-toi comme tu parlerais à un·e ami·e proche qui a de la peine.',a:'J\'ai le droit de me reposer. J\'ai le droit de me tromper.'},soft_open:{p:'Ce que tu ressens est légitime. Pas besoin de le réparer, pas besoin de l\'expliquer. Autorise-toi à être tendre aujourd\'hui — c\'est aussi une forme de force.',a:'Je vais bien même quand je ne vais pas bien.'},confused_love:{p:'Tu te demandes si quelqu\'un t\'aime vraiment ? La réponse est dans ce que tu ressens à ses côtés — peux-tu être toi-même ?',a:'Je n\'ai pas besoin de toutes les réponses aujourd\'hui.'},confused_career:{p:'Tu es entre plusieurs choix. Cette carte dit : celui qui te fait RESPIRER PLUS LÉGÈREMENT quand tu y penses — choisis-le. Le corps sait avant l\'esprit.',a:'Chaque pas me mène au bon endroit.'},confused_self:{p:'Tu n\'es pas perdu·e — tu es en transition. Être perdu·e, c\'est rester immobile. Tu avances encore, donc tu es encore sur la bonne voie.',a:'Je fais confiance au chemin même sans voir la destination.'},confused_open:{p:'Quand tout est flou, demande : "Comment je veux me sentir dans 3 ans ?" La réponse éclairera aujourd\'hui.',a:'L\'incertitude est l\'espace où naît le nouveau.'},hopeful_love:{p:'L\'énergie que tu dégages aujourd\'hui attirera la bonne personne. Ne te retiens pas. Brille. Celui ou celle qui te correspond le remarquera.',a:'Je mérite quelqu\'un qui m\'aime comme je l\'aime.'},hopeful_career:{p:'C\'est une fenêtre dorée. Cette idée que tu mûris — LANCE-la. Cette carte dit : "Fait vaut mieux que parfait." Aujourd\'hui est ton jour.',a:'Je crois en mes idées plus qu\'en mes peurs.'},hopeful_self:{p:'Tu es sur une lancée de glow up. Les autres ne le voient pas encore, mais l\'univers le voit. Dans 3 mois, tu regarderas en arrière et remercieras la décision d\'aujourd\'hui.',a:'Je deviens une version de moi dont je suis fier·e.'},hopeful_open:{p:'L\'énergie que tu as aujourd\'hui est un cadeau. Utilise-la pour commencer ce que tu repousses depuis longtemps. Un message, une ligne de code, un pas.',a:'Aujourd\'hui est un bon jour pour oser.'},tired_love:{p:'Tu n\'as pas à être "toujours disponible" pour être aimé·e. Quelqu\'un qui t\'aime vraiment comprend quand tu as besoin d\'espace. Autorise-toi à te retirer.',a:'J\'ai le droit de me reposer, même en amour.'},tired_career:{p:'Le burnout n\'est pas ta faute — c\'est un message. Ton corps demande une pause. Cette carte te demande : ferme l\'ordi, continue demain. La productivité reviendra.',a:'Le repos est une forme de progrès.'},tired_self:{p:'Tu ne "régresses" pas, tu as juste besoin de recharger. L\'arbre a besoin de l\'hiver pour fleurir au printemps. Repose-toi sans culpabilité. Tu le mérites.',a:'Je suis assez même quand je ne fais rien.'},tired_open:{p:'Ton corps te parle. Écoute-le. Une heure de sommeil en plus, un verre d\'eau, une marche de 10 minutes. C\'est tout ce que tu as à faire aujourd\'hui.',a:'Je me priorise sans m\'excuser.'}},
+    moodLabels:{soft:'🌸 Fragile',confused:'🌀 Dans le flou',hopeful:'✨ Plein·e d\'espoir',tired:'🌿 Fatigué·e'},
+    topicLabels:{love:'💖 Amour',career:'🎯 Carrière',self:'🪞 Toi-même',open:'🎲 Ouvert'},
+    luckyVibe:{soft:'Pastel + musique douce',confused:'Blanc + silence',hopeful:'Rouge + Taylor Swift',tired:'Beige + lo-fi',_default:'Selon le jour'},
+    luckyAct:{love:'Envoyer un message',career:'Livrer une petite chose',self:'Journal 5 minutes',open:'Marcher 15 minutes',_default:'Vivre heureux·se'}
+  }
+};
+
+function applyI18n(lang){
+  const t = I18N[lang].t;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if(t[k]!=null) el.innerHTML=t[k]; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ const k=el.getAttribute('data-i18n-ph'); if(t[k]!=null) el.placeholder=t[k]; });
+}
+function setLang(lang){
+  if(!I18N[lang]) lang='vi';
+  LANG=lang;
+  try { localStorage.setItem('lang', lang); } catch(e){}
+  document.documentElement.lang = lang;
+  const L = I18N[lang];
+  hrQuestions=L.hrQuestions; gfQuestions=L.gfQuestions; tarotCards=L.tarotCards; prophecies=L.prophecies;
+  moodLabels=L.moodLabels; topicLabels=L.topicLabels; statuses=L.statuses;
+  applyI18n(lang);
+  const st=document.getElementById('status-text'); if(st) st.textContent=statuses[statusIdx%statuses.length];
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.getAttribute('data-lang')===lang));
+  if(typeof backToMode==='function') backToMode();
+  if(typeof resetTarot==='function') resetTarot();
+}
+setLang((function(){ try { return localStorage.getItem('lang') || 'vi'; } catch(e){ return 'vi'; } })());
 </script>
 
 </body>
